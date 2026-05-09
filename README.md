@@ -72,11 +72,15 @@
 ├── Resources/
 │   └── Assets.xcassets
 └── Features/
-    ├── ~~~/
-    │   ├── ~~~ViewController.swift
-    │   ├── ~~~View.swift
-    │   └── ~~~ViewModel.swift
-    └── OOO/
+    ├── List/
+    │   ├── OOOViewController.swift
+    │   ├── OOOView.swift
+    │   └── OOOViewModel.swift
+    └── Map/
+    |   ├── OOOViewController.swift
+    |   ├── OOOView.swift
+    |   └── OOOViewModel.swift
+    └── Detail/
         ├── OOOViewController.swift
         ├── OOOView.swift
         └── OOOViewModel.swift
