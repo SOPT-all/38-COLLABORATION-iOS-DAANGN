@@ -5,7 +5,6 @@
 | **신서연** | **정교은** | **이서영** |
 | :---: | :---: | :---: |
 |<img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/4cc75e46-1efd-4eb0-928b-2236d28b7e83" />|<img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/e7dfd23c-1a76-47fb-a190-1f0a2cbc634e" />|<img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/dd7ecd7e-e13b-4798-9cbd-aa02555d083e" />
-| 개발 리드 | 왼팔 | 오른팔 |
 
 ## 시연 영상
 
@@ -34,9 +33,9 @@
 ## Convention
 
 ### Branch
-타입/#이슈번호 - 구현할 기능
+타입/#이슈번호-구현할 기능
 
-`feat/#2 - loginVC`
+`feat/#2-loginVC`
 
 ### Tag
 | 태그 | 사용 |
@@ -53,7 +52,7 @@
 1. 태그는 반드시 **소문자**로 작성합니다.
 2. 내용은 **한글**로 작성합니다.
 3. 제목제목은 50자 이내로, 간결하게 명령조로 작성합니다. 상세 설명이 필요한 경우 description에 작성합니다.
-`타입 : 커밋 내용`
+`타입: 커밋 내용`
 
 `feat: 로그인 기능 구현`
 
