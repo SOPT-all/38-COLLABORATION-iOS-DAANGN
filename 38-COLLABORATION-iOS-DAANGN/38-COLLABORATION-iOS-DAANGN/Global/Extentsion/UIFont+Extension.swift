@@ -11,21 +11,20 @@ import UIKit
 extension UIFont {
     
     static func sfpro(size: CGFloat, weight: UIFont.Weight) -> UIFont {
-        let familyName = "SFPRO"
-        let weightString: String
+        let fontName: String
         
         switch weight {
         case .bold:
-            weightString = "Bold"
+            fontName = "SF-Pro-Text-Bold"
         case .medium:
-            weightString = "Medium"
+            fontName = "SF-Pro-Text-Medium"
         case .regular:
-            weightString = "Regular"
+            fontName = "SF-Pro-Text-Regular"
         default:
-            weightString = "Regular"
+            fontName = "SF-Pro-Text-Regular"
         }
         
-        return UIFont(name: "\(familyName)-\(weightString)", size: size)
+        return UIFont(name: fontName, size: size)
         ?? UIFont.systemFont(ofSize: size, weight: weight)
     }
 }

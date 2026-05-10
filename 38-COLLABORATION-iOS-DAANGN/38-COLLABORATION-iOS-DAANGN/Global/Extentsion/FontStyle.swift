@@ -7,8 +7,6 @@
 
 import UIKit
 
-import UIKit
-
 struct FontStyle {
     let font: UIFont
     let lineHeight: CGFloat
