@@ -12,7 +12,7 @@ extension NSAttributedString {
     static func styled(
         _ text: String,
         style: FontStyle,
-        color: UIColor,
+        color: UIColor = UIColor(red: 26/255, green: 28/255, blue: 32/255, alpha: 1),
         alignment: NSTextAlignment = .natural
     ) -> NSAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
