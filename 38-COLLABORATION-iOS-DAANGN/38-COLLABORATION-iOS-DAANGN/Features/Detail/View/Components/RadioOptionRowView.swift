@@ -9,22 +9,30 @@ import UIKit
 import Then
 import SnapKit
 
-final class RadioOptionRowView: UIView {
+final class RadioOptionRowView: UIControl {
+    
+    override var isSelected: Bool {
+        didSet {
+            updateStyle()
+        }
+    }
     
     private let radioImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
     }
     
     private let optionLabel = UILabel().then {
-        $0.textColor = .gray1000
+        $0.setText("", style: .body1Regular)
     }
     
     init(title: String, isSelected: Bool = false) {
         super.init(frame: .zero)
         
-        setStyle(title: title, isSelected: isSelected)
+        self.isSelected = isSelected
+        setStyle(title: title)
         setUI()
         setLayout()
+        updateStyle()
     }
     
     required init?(coder: NSCoder) {
@@ -34,11 +42,8 @@ final class RadioOptionRowView: UIView {
 
 private extension RadioOptionRowView {
     
-    func setStyle(title: String, isSelected: Bool) {
-        radioImageView.image = UIImage(
-            named: isSelected ? "radio_selected" : "radio_unselected"
-        )
-        optionLabel.setText(title, style: .h5Medium)
+    func setStyle(title: String) {
+        optionLabel.setText(title, style: .body1Regular)
     }
     
     func setUI() {
@@ -49,7 +54,7 @@ private extension RadioOptionRowView {
         radioImageView.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20)
             $0.centerY.equalToSuperview()
-            $0.size.equalTo(20)
+            $0.size.equalTo(24)
         }
         
         optionLabel.snp.makeConstraints {
@@ -60,5 +65,11 @@ private extension RadioOptionRowView {
         snp.makeConstraints {
             $0.height.equalTo(56)
         }
+    }
+    
+    func updateStyle() {
+        radioImageView.image = UIImage(
+            named: isSelected ? "radio_button_fill" : "radio_button"
+        )
     }
 }
