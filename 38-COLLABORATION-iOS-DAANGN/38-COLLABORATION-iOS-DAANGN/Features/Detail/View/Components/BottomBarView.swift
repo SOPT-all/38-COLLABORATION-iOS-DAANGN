@@ -16,8 +16,8 @@ final class BottomBarView: UIView {
     }
     
     private let heartButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "heart"), for: .normal)
-        $0.tintColor = .gray800
+        $0.setImage(UIImage(named: "icon_heart_line"), for: .normal)
+        $0.setImage(UIImage(named: "icon_heart_Fill"), for: .selected)
     }
     
     let chatButton = UIButton().then {
@@ -41,12 +41,11 @@ final class BottomBarView: UIView {
 
     private func setStyle() {
         backgroundColor = .gray00
+        heartButton.addTarget(self, action: #selector(heartButtonDidTapped), for: .touchUpInside)
     }
     
     private func setUI() {
-        addSubview(dividerView)
-        addSubview(heartButton)
-        addSubview(chatButton)
+        addSubviews(dividerView, heartButton, chatButton)
     }
     
     private func setLayout() {
@@ -67,5 +66,10 @@ final class BottomBarView: UIView {
             $0.leading.equalTo(heartButton.snp.trailing).offset(12)
             $0.trailing.equalToSuperview().inset(15)
         }
+    }
+    
+    @objc
+    private func heartButtonDidTapped() {
+        heartButton.isSelected.toggle()
     }
 }
