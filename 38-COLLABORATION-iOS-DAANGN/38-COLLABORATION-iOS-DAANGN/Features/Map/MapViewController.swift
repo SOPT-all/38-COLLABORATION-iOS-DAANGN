@@ -23,7 +23,6 @@ final class MapViewController: UIViewController {
     private let listButton = UIButton(type: .system).then {
         var config = UIButton.Configuration.plain()
 
-        config.title = "목록 보기"
         config.image = UIImage(named: "listIcon")?
             .withRenderingMode(.alwaysTemplate)
 
@@ -37,10 +36,13 @@ final class MapViewController: UIViewController {
             trailing: 8
         )
 
-        var title = AttributedString("목록 보기")
-        title.font = FontStyle.label3Regular.font
-        title.foregroundColor = .gray00
-        config.attributedTitle = title
+        config.attributedTitle = AttributedString(
+            NSAttributedString.styled(
+                "목록 보기",
+                style: .label3Regular,
+                color: .gray00
+            )
+        )
 
         $0.configuration = config
 
@@ -48,6 +50,24 @@ final class MapViewController: UIViewController {
         $0.backgroundColor = .gray1000
         $0.layer.cornerRadius = 17
         $0.clipsToBounds = true
+    }
+    
+    private let currentLocationButton = UIButton(type: .system).then {
+        $0.setImage(
+            UIImage(named: "locationIcon")?
+                .withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
+
+        $0.tintColor = .gray900
+        $0.backgroundColor = .gray00
+
+        $0.layer.cornerRadius = 24
+
+        $0.layer.shadowColor = UIColor.black.cgColor
+        $0.layer.shadowOpacity = 0.25
+        $0.layer.shadowOffset = .zero
+        $0.layer.shadowRadius = 3
     }
 
     // 라이프싸이클
@@ -59,6 +79,7 @@ final class MapViewController: UIViewController {
         setupHierarchy()
         setupLayout()
     }
+    
 
     // 셋업
 
@@ -69,6 +90,7 @@ final class MapViewController: UIViewController {
     private func setupHierarchy() {
         view.addSubview(mapImageView)
         view.addSubview(listButton)
+        view.addSubview(currentLocationButton)
     }
 
     private func setupLayout() {
@@ -81,6 +103,12 @@ final class MapViewController: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             $0.width.equalTo(80)
             $0.height.equalTo(34)
+        }
+        
+        currentLocationButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(15)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
+            $0.size.equalTo(48)
         }
     }
 }
