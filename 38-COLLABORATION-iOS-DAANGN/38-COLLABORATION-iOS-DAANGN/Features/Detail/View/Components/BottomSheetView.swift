@@ -21,8 +21,8 @@ final class BottomSheetView: UIView {
         "혹시 가격 조정 가능한가요?",
         "직접 입력"
     ]
-    
     private let directInputOptionIndex = 4
+    private let handleAreaView = UIView()
     private let handleBarView = UIView().then {
         $0.backgroundColor = .gray400
         $0.layer.cornerRadius = 3
@@ -77,7 +77,8 @@ final class BottomSheetView: UIView {
     }
     
     private func setUI() {
-        addSubviews(handleBarView, titleLabel, subtitleLabel, dividerView, optionStackView, sendButton)
+        addSubviews(handleAreaView, titleLabel, subtitleLabel, dividerView, optionStackView, sendButton)
+        handleAreaView.addSubview(handleBarView)
         
         optionRowViews = optionTexts.enumerated().map { index, text in
             let optionRowView = RadioOptionRowView(title: text, isSelected: index == selectedOptionIndex)
@@ -94,6 +95,11 @@ final class BottomSheetView: UIView {
     }
     
     private func setLayout() {
+        handleAreaView.snp.makeConstraints {
+            $0.top.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(36)
+        }
+        
         handleBarView.snp.makeConstraints {
             $0.width.equalTo(32)
             $0.height.equalTo(4)
@@ -171,6 +177,6 @@ final class BottomSheetView: UIView {
 extension BottomSheetView {
     
     func addHandleBarGesture(_ gesture: UIGestureRecognizer) {
-        handleBarView.addGestureRecognizer(gesture)
+        handleAreaView.addGestureRecognizer(gesture)
     }
 }
