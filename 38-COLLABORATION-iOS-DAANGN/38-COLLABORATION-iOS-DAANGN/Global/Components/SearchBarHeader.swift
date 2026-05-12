@@ -25,6 +25,7 @@ final class SearchBarHeader: UIView {
     
     private let closeButton = UIButton().then {
         $0.setImage(.xmarkCircleFill, for: .normal)
+        $0.addTarget(self, action: #selector(clearText), for: .touchUpInside)
     }
     
     private let filterButton = UIButton().then {
@@ -65,5 +66,12 @@ final class SearchBarHeader: UIView {
             $0.trailing.equalTo(filterButton.snp.leading).offset(-8)
             $0.height.equalTo(40)
         }
+    }
+
+    @objc
+    private func clearText() {
+        searchInput.text = ""
+        searchInput.resignFirstResponder()
+        resignFirstResponder()
     }
 }
