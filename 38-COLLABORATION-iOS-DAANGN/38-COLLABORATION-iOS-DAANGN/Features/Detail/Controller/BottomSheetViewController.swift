@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 import SnapKit
 
 final class BottomSheetViewController: UIViewController {
@@ -52,10 +53,10 @@ private extension BottomSheetViewController {
             self?.dismissBottomSheet()
         }
         
-        let dimmedTapGesture = UITapGestureRecognizer(target: self, action: #selector(dimmedViewDidTapped))
+        let dimmedTapGesture = UITapGestureRecognizer(target: self, action: #selector(dimmedViewDidTap))
         dimmedView.addGestureRecognizer(dimmedTapGesture)
         
-        let handleBarPanGesture = UIPanGestureRecognizer(target: self, action: #selector(handleBarDidPanned))
+        let handleBarPanGesture = UIPanGestureRecognizer(target: self, action: #selector(handleBarDidPan))
         bottomSheetView.addHandleBarGesture(handleBarPanGesture)
     }
     
@@ -85,12 +86,12 @@ private extension BottomSheetViewController {
     }
     
     @objc
-    private func dimmedViewDidTapped() {
+    private func dimmedViewDidTap() {
         dismissBottomSheet()
     }
     
     @objc
-    private func handleBarDidPanned(_ gesture: UIPanGestureRecognizer) {
+    private func handleBarDidPan(_ gesture: UIPanGestureRecognizer) {
         let translationY = gesture.translation(in: view).y
         
         switch gesture.state {

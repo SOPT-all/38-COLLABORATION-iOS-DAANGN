@@ -56,6 +56,7 @@ final class BottomSheetView: UIView {
         $0.setTitle("전송하기", style: .h5Medium, color: .gray00)
         $0.backgroundColor = .carrot600
         $0.layer.cornerRadius = 10
+        $0.clipsToBounds = true
     }
     
     override init(frame: CGRect) {

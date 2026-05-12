@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 import SnapKit
 
 final class ProductDetailViewController: UIViewController {
@@ -31,7 +32,7 @@ private extension ProductDetailViewController {
         view.addSubview(bottomBarView)
         bottomBarView.chatButton.addTarget(
             self,
-            action: #selector(chatButtonDidTapped),
+            action: #selector(chatButtonDidTap),
             for: .touchUpInside
         )
     }
@@ -45,7 +46,7 @@ private extension ProductDetailViewController {
     }
     
     @objc
-    private func chatButtonDidTapped() {
+    private func chatButtonDidTap() {
         presentBottomSheetVC()
     }
     
