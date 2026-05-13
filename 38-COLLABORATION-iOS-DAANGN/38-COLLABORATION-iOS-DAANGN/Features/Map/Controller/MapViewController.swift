@@ -72,6 +72,7 @@ final class MapViewController: UIViewController {
     
     
     // MARK: 매물 칩 하드코딩
+    
     private let firstProductChipView = MapProductChipView(
         imageName: "img_product6",
         price: "28,000원",
@@ -85,7 +86,7 @@ final class MapViewController: UIViewController {
 
     private let thirdProductChipView = MapProductChipView(
         imageName: "img_product4",
-        price: "23,000원",
+        price: "23,000원"
     )
 
     private let fourthProductChipView = MapProductChipView(
