@@ -42,7 +42,7 @@ final class MapProductChipView: UIView {
     private let priceLabel = UILabel()
 
     private let heartImageView = UIImageView().then {
-        $0.image = UIImage(named: "heartIcon")
+        $0.image = UIImage(named: "colorHeartIcon")
         $0.contentMode = .scaleAspectFit
     }
 
