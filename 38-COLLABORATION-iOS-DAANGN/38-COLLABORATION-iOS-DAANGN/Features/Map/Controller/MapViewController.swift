@@ -71,7 +71,7 @@ final class MapViewController: UIViewController {
     }
     
     
-    // MARK: 매물 칩 더미데이터
+    // MARK: 매물 칩 하드코딩
     private let firstProductChipView = MapProductChipView(
         imageName: "img_product6",
         price: "28,000원",
@@ -150,7 +150,7 @@ final class MapViewController: UIViewController {
             $0.size.equalTo(48)
         }
         
-        // MARK: 매물 칩 UI 뷰에 붙이기
+        // MARK: 매물 칩 UI 화면에 올리기
         firstProductChipView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(145)
             $0.leading.equalToSuperview().offset(37)
@@ -158,21 +158,21 @@ final class MapViewController: UIViewController {
 
         secondProductChipView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(110)
-            $0.trailing.equalToSuperview().inset(16)
+            $0.trailing.equalToSuperview().inset(15)
         }
 
         thirdProductChipView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(235)
-            $0.trailing.equalToSuperview().inset(76)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(250)
+            $0.trailing.equalToSuperview().inset(80)
         }
 
         fourthProductChipView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(295)
-            $0.leading.equalToSuperview().offset(52)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(300)
+            $0.leading.equalToSuperview().offset(50)
         }
 
         fifthProductChipView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(378)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(370)
             $0.centerX.equalToSuperview()
         }
     }
