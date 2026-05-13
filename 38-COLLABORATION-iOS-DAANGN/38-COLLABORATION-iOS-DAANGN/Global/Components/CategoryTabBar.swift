@@ -137,4 +137,8 @@ extension CategoryTabBar: UICollectionViewDelegateFlowLayout {
         let width = textWidth + 28
         return CGSize(width: width, height: 42)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        return indexPath.item == 1
+    }
 }
