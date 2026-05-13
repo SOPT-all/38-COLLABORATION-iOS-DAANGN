@@ -26,6 +26,12 @@ final class MapProductChipView: UIView {
         $0.layer.shadowRadius = 4
     }
 
+    private let contentStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.alignment = .center
+        $0.spacing = 4
+    }
+
     private let productImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
@@ -60,9 +66,11 @@ private extension MapProductChipView {
     func setupHierarchy() {
         addSubview(containerView)
 
-        containerView.addSubview(productImageView)
-        containerView.addSubview(priceLabel)
-        containerView.addSubview(heartImageView)
+        containerView.addSubview(contentStackView)
+
+        contentStackView.addArrangedSubview(productImageView)
+        contentStackView.addArrangedSubview(priceLabel)
+        contentStackView.addArrangedSubview(heartImageView)
     }
 
     func setupLayout() {
@@ -71,21 +79,17 @@ private extension MapProductChipView {
             $0.height.equalTo(32)
         }
 
-        productImageView.snp.makeConstraints {
+        contentStackView.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(4)
-            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(8)
+            $0.top.bottom.equalToSuperview().inset(4)
+        }
+
+        productImageView.snp.makeConstraints {
             $0.size.equalTo(24)
         }
 
-        priceLabel.snp.makeConstraints {
-            $0.leading.equalTo(productImageView.snp.trailing).offset(6)
-            $0.centerY.equalToSuperview()
-        }
-
         heartImageView.snp.makeConstraints {
-            $0.leading.equalTo(priceLabel.snp.trailing).offset(4)
-            $0.trailing.equalToSuperview().inset(8)
-            $0.centerY.equalToSuperview()
             $0.size.equalTo(12)
         }
     }

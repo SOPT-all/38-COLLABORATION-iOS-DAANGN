@@ -73,30 +73,31 @@ final class MapViewController: UIViewController {
     
     // MARK: 매물 칩 더미데이터
     private let firstProductChipView = MapProductChipView(
-        imageName: "productImage1",
+        imageName: "img_product6",
         price: "28,000원",
-        isLiked: true
     )
 
     private let secondProductChipView = MapProductChipView(
-        imageName: "productImage2",
-        price: "9,400원"
-    )
-
-    private let thirdProductChipView = MapProductChipView(
-        imageName: "productImage3",
-        price: "23,000원",
+        imageName: "img_product5",
+        price: "9,400원",
         isLiked: true
     )
 
+    private let thirdProductChipView = MapProductChipView(
+        imageName: "img_product4",
+        price: "23,000원",
+    )
+
     private let fourthProductChipView = MapProductChipView(
-        imageName: "productImage4",
-        price: "17,000원"
+        imageName: "img_product1",
+        price: "17,000원",
+        isLiked: true
     )
 
     private let fifthProductChipView = MapProductChipView(
-        imageName: "productImage5",
-        price: "12,900원"
+        imageName: "img_product2",
+        price: "12,900원",
+        isLiked: true
     )
 
     // MARK: 라이프싸이클
@@ -127,6 +128,8 @@ final class MapViewController: UIViewController {
         view.addSubview(thirdProductChipView)
         view.addSubview(fourthProductChipView)
         view.addSubview(fifthProductChipView)
+        
+        
     }
 
     private func setupLayout() {
