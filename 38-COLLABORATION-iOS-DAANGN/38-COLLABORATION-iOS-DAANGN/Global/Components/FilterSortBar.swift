@@ -11,12 +11,12 @@ import Then
 import SnapKit
 
 final class FilterSortBar: UIView {
-    private let onSaleCheckButton = UIButton().then {
+    private lazy var onSaleCheckButton = UIButton().then {
         $0.setImage(.rectangle, for: .normal)
     }
     private let onSaleLabel = UILabel()
     
-    private let isNearCheckButton = UIButton().then {
+    private lazy var isNearCheckButton = UIButton().then {
         $0.setImage(.rectangle, for: .normal)
     }
     
@@ -24,7 +24,7 @@ final class FilterSortBar: UIView {
     
     private let sortLabel = UILabel()
     
-    private let dropdownButton = UIButton().then {
+    private lazy var dropdownButton = UIButton().then {
         $0.setImage(.chevrondown, for: .normal)
     }
     
@@ -56,6 +56,7 @@ final class FilterSortBar: UIView {
             $0.leading.equalTo(onSaleCheckButton.snp.trailing).offset(6)
         }
         isNearCheckButton.snp.makeConstraints {
+            $0.width.height.equalTo(16)
             $0.centerY.equalToSuperview()
             $0.leading.equalTo(onSaleLabel.snp.trailing).offset(16)
         }
@@ -66,6 +67,7 @@ final class FilterSortBar: UIView {
         dropdownButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().offset(-26)
+            $0.width.height.equalTo(16)
         }
         sortLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()

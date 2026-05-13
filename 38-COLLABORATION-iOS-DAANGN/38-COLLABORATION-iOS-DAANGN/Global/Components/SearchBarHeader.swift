@@ -12,7 +12,7 @@ import SnapKit
 
 final class SearchBarHeader: UIView {
     
-    private let backButton = UIButton().then {
+    private lazy var backButton = UIButton().then {
         $0.setImage(.chevronLeft, for: .normal)
     }
     
@@ -23,12 +23,11 @@ final class SearchBarHeader: UIView {
         $0.addLeftPadding(12)
     }
     
-    private let closeButton = UIButton().then {
+    private lazy var closeButton = UIButton().then {
         $0.setImage(.xmarkCircleFill, for: .normal)
-        $0.addTarget(self, action: #selector(clearText), for: .touchUpInside)
     }
     
-    private let filterButton = UIButton().then {
+    private lazy var filterButton = UIButton().then {
         $0.setImage(.filter, for: .normal)
     }
     
@@ -47,6 +46,7 @@ final class SearchBarHeader: UIView {
 
         searchInput.addRightButton(closeButton)
         searchInput.setText("조명", style: .body1Regular)
+        closeButton.addTarget(self, action: #selector(clearText), for: .touchUpInside)
     }
     
     private func setLayout() {

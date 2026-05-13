@@ -12,7 +12,7 @@ import SnapKit
 
 class ListViewController: UIViewController {
     
-    private let header = FullHeader()
+    private lazy var header = FullHeader()
     
     
     override func viewDidLoad() {
@@ -30,6 +30,7 @@ class ListViewController: UIViewController {
         header.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(189)
         }
     }
 }
