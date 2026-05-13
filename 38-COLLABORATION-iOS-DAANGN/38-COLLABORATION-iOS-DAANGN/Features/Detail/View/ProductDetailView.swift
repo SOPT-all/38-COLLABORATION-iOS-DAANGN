@@ -13,6 +13,7 @@ import Then
 enum ProductDetailSection: Int, CaseIterable {
     case imageCarousel
     case sellerProfile
+    case productInformation
 }
 
 final class ProductDetailView: UIView {
@@ -36,6 +37,11 @@ final class ProductDetailView: UIView {
             withReuseIdentifier: ImageIndicatorView.identifier
         )
         $0.register(SellerProfileCell.self, forCellWithReuseIdentifier: SellerProfileCell.identifier)
+        $0.register(
+            ProductInfoCell.self,
+            forCellWithReuseIdentifier: ProductInfoCell.identifier
+        )
+        
     }
     
     override init(frame: CGRect) {
@@ -78,6 +84,8 @@ private extension ProductDetailView {
                 return self.createImageCarouselSection()
             case .sellerProfile:
                 return self.createSellerProfileSection()
+            case .productInformation:
+                return self.createProductInformationSection()
             }
         }
     }
@@ -118,6 +126,14 @@ private extension ProductDetailView {
     func createSellerProfileSection() -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(80)), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        return section
+    }
+    
+    func createProductInformationSection() ->
+    NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(95)), subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         return section
     }
