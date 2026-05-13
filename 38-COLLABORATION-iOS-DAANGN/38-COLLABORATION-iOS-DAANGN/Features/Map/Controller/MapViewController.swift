@@ -12,7 +12,7 @@ import Then
 
 final class MapViewController: UIViewController {
 
-    // UI
+    // MARK: UI
 
     private let mapImageView = UIImageView().then {
         $0.image = UIImage(named: "mapImageView")
@@ -69,8 +69,37 @@ final class MapViewController: UIViewController {
         $0.layer.shadowOffset = .zero
         $0.layer.shadowRadius = 3
     }
+    
+    
+    // MARK: 매물 칩 더미데이터
+    private let firstProductChipView = MapProductChipView(
+        imageName: "productImage1",
+        price: "28,000원",
+        isLiked: true
+    )
 
-    // 라이프싸이클
+    private let secondProductChipView = MapProductChipView(
+        imageName: "productImage2",
+        price: "9,400원"
+    )
+
+    private let thirdProductChipView = MapProductChipView(
+        imageName: "productImage3",
+        price: "23,000원",
+        isLiked: true
+    )
+
+    private let fourthProductChipView = MapProductChipView(
+        imageName: "productImage4",
+        price: "17,000원"
+    )
+
+    private let fifthProductChipView = MapProductChipView(
+        imageName: "productImage5",
+        price: "12,900원"
+    )
+
+    // MARK: 라이프싸이클
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +110,7 @@ final class MapViewController: UIViewController {
     }
     
 
-    // 셋업
+    // MARK: 셋업
 
     private func setupStyle() {
         view.backgroundColor = .white
@@ -91,6 +120,13 @@ final class MapViewController: UIViewController {
         view.addSubview(mapImageView)
         view.addSubview(listButton)
         view.addSubview(currentLocationButton)
+        
+        // MARK: 매물 칩
+        view.addSubview(firstProductChipView)
+        view.addSubview(secondProductChipView)
+        view.addSubview(thirdProductChipView)
+        view.addSubview(fourthProductChipView)
+        view.addSubview(fifthProductChipView)
     }
 
     private func setupLayout() {
@@ -109,6 +145,32 @@ final class MapViewController: UIViewController {
             $0.trailing.equalToSuperview().inset(15)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
             $0.size.equalTo(48)
+        }
+        
+        // MARK: 매물 칩 UI 뷰에 붙이기
+        firstProductChipView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(145)
+            $0.leading.equalToSuperview().offset(37)
+        }
+
+        secondProductChipView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(110)
+            $0.trailing.equalToSuperview().inset(16)
+        }
+
+        thirdProductChipView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(235)
+            $0.trailing.equalToSuperview().inset(76)
+        }
+
+        fourthProductChipView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(295)
+            $0.leading.equalToSuperview().offset(52)
+        }
+
+        fifthProductChipView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(378)
+            $0.centerX.equalToSuperview()
         }
     }
 }
