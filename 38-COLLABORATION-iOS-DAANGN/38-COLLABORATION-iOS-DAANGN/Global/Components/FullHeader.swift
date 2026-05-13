@@ -47,7 +47,7 @@ class FullHeader: UIView {
         }
         filterSortBar.snp.makeConstraints {
             $0.top.equalTo(filterChip.snp.bottom)
-            $0.leading.trailing.bottom.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(37)
         }
     }
