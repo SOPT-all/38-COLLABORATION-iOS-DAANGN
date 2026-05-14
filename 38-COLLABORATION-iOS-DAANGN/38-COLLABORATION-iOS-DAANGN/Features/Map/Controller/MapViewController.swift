@@ -13,7 +13,13 @@ import Then
 final class MapViewController: UIViewController {
 
     // MARK: UI
+    
+    private let statusBarBackgroundView = UIView().then {
+        $0.backgroundColor = .white
+    }
 
+    private let headerView = SimpleHeader()
+    
     private let mapImageView = UIImageView().then {
         $0.image = UIImage(named: "mapImageView")
         $0.contentMode = .scaleAspectFill
@@ -109,6 +115,7 @@ final class MapViewController: UIViewController {
         setupStyle()
         setupHierarchy()
         setupLayout()
+        setupAction()
     }
     
 
@@ -120,6 +127,9 @@ final class MapViewController: UIViewController {
 
     private func setupHierarchy() {
         view.addSubview(mapImageView)
+        view.addSubview(statusBarBackgroundView)
+        view.addSubview(headerView)
+        
         view.addSubview(listButton)
         view.addSubview(currentLocationButton)
         
@@ -136,6 +146,17 @@ final class MapViewController: UIViewController {
     private func setupLayout() {
         mapImageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+        
+        statusBarBackgroundView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(47)
+        }
+        
+        headerView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(47)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(110)
         }
 
         listButton.snp.makeConstraints {
@@ -176,5 +197,29 @@ final class MapViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(370)
             $0.centerX.equalToSuperview()
         }
+    }
+    
+    private func setupAction() {
+        listButton.addTarget(
+            self,
+            action: #selector(listButtonDidTap),
+            for: .touchUpInside
+        )
+    }
+
+    
+    // MARK: 버튼 함수
+    @objc
+    private func listButtonDidTap() {
+        let listViewController = ListViewController()
+
+        let transition = CATransition()
+        transition.duration = 0.3
+        transition.type = .push
+        transition.subtype = .fromLeft
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+
+        navigationController?.view.layer.add(transition, forKey: kCATransition)
+        navigationController?.pushViewController(listViewController, animated: false)
     }
 }

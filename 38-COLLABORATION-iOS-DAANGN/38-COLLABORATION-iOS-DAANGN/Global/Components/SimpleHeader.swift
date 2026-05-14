@@ -27,6 +27,7 @@ class SimpleHeader: UIView {
     
     private func setUI() {
         [searchBar, filterChip].forEach { self.addSubview($0) }
+        backgroundColor = UIColor.white
     }
     
     private func setLayout() {
