@@ -115,6 +115,7 @@ final class MapViewController: UIViewController {
         setupStyle()
         setupHierarchy()
         setupLayout()
+        setupAction()
     }
     
 
@@ -196,5 +197,29 @@ final class MapViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(370)
             $0.centerX.equalToSuperview()
         }
+    }
+    
+    private func setupAction() {
+        listButton.addTarget(
+            self,
+            action: #selector(listButtonDidTap),
+            for: .touchUpInside
+        )
+    }
+
+    
+    // MARK: 함수
+    @objc
+    private func listButtonDidTap() {
+        let listViewController = ListViewController()
+
+        let transition = CATransition()
+        transition.duration = 0.3
+        transition.type = .push
+        transition.subtype = .fromLeft
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+
+        navigationController?.view.layer.add(transition, forKey: kCATransition)
+        navigationController?.pushViewController(listViewController, animated: false)
     }
 }
