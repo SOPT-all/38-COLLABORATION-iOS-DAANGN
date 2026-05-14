@@ -12,6 +12,8 @@ import Then
 
 enum ProductDetailSection: Int, CaseIterable {
     case imageCarousel
+    case sellerProfile
+    case productInformation
 }
 
 final class ProductDetailView: UIView {
@@ -34,6 +36,12 @@ final class ProductDetailView: UIView {
             forSupplementaryViewOfKind: ImageIndicatorView.elementKind,
             withReuseIdentifier: ImageIndicatorView.identifier
         )
+        $0.register(SellerProfileCell.self, forCellWithReuseIdentifier: SellerProfileCell.identifier)
+        $0.register(
+            ProductInfoCell.self,
+            forCellWithReuseIdentifier: ProductInfoCell.identifier
+        )
+        
     }
     
     override init(frame: CGRect) {
@@ -74,25 +82,22 @@ private extension ProductDetailView {
             switch section {
             case .imageCarousel:
                 return self.createImageCarouselSection()
+            case .sellerProfile:
+                return self.createSellerProfileSection()
+            case .productInformation:
+                return self.createProductInformationSection()
             }
         }
     }
     
     func createImageCarouselSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        let groupSize = NSCollectionLayoutSize(
+        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalWidth(1.0)
+            heightDimension: .fractionalHeight(1.0))
         )
-        let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: groupSize,
-            subitems: [item]
-        )
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(1.0)), subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPaging
@@ -116,5 +121,20 @@ private extension ProductDetailView {
             alignment: .bottomTrailing,
             absoluteOffset: CGPoint(x: 0, y: -35)
         )
+    }
+    
+    func createSellerProfileSection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(80)), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        return section
+    }
+    
+    func createProductInformationSection() ->
+    NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(130)), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        return section
     }
 }

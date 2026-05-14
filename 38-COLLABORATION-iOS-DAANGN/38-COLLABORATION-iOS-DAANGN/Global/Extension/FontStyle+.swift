@@ -41,10 +41,10 @@ extension FontStyle {
     static let body2Regular = FontStyle(size: 14, weight: .regular)
     
     // MARK: - Label
-    static let label1Medium = FontStyle(size: 13, weight: .medium)
-    static let label1Regular = FontStyle(size: 13, weight: .regular)
+    static let label1Medium = FontStyle(size: 11, weight: .medium)
+    static let label1Regular = FontStyle(size: 11, weight: .regular)
     static let label2Medium = FontStyle(size: 12, weight: .medium)
     static let label2Regular = FontStyle(size: 12, weight: .regular)
-    static let label3Medium = FontStyle(size: 11, weight: .medium)
-    static let label3Regular = FontStyle(size: 11, weight: .regular)
+    static let label3Medium = FontStyle(size: 13, weight: .medium)
+    static let label3Regular = FontStyle(size: 13, weight: .regular)
 }

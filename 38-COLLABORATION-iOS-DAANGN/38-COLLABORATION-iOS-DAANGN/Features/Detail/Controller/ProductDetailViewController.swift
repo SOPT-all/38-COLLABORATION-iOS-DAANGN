@@ -96,6 +96,10 @@ extension ProductDetailViewController: UICollectionViewDataSource {
         switch section {
         case .imageCarousel:
             return productDetailData.imageURLs.count
+        case .sellerProfile:
+            return 1
+        case .productInformation:
+            return 1
         }
     }
     
@@ -120,8 +124,42 @@ extension ProductDetailViewController: UICollectionViewDataSource {
                 imageName: productDetailData.imageURLs[indexPath.item]
             )
             return cell
+            
+        case .sellerProfile:
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: SellerProfileCell.identifier,
+                for: indexPath
+            ) as? SellerProfileCell else {
+                return UICollectionViewCell()
+            }
+            
+            let seller = productDetailData.seller
+            
+            cell.dataBind(
+                name: seller.name,
+                address: seller.address,
+                score: "\(seller.mannerTemperature)°C"
+            )
+            return cell
+        case .productInformation:
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ProductInfoCell.identifier,
+                for: indexPath
+            ) as? ProductInfoCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.dataBind(
+                name: productDetailData.title,
+                price: productDetailData.price,
+                location: productDetailData.tradeLocation,
+                time: productDetailData.lastBumpedAt,
+                tags: productDetailData.tags
+            )
+            return cell
         }
     }
+
     
     func collectionView(
         _ collectionView: UICollectionView,
