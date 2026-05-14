@@ -145,7 +145,7 @@ final class MapViewController: UIViewController {
         headerView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(150)
+            $0.height.equalTo(110)
         }
 
         listButton.snp.makeConstraints {
