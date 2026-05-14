@@ -9,7 +9,7 @@ import UIKit
 
 extension UIColor {
 
-    // Asset Loader
+    // MARK: Asset Loader
 
     private static func asset(_ name: String) -> UIColor {
         guard let color = UIColor(named: name) else {
@@ -19,7 +19,7 @@ extension UIColor {
         return color
     }
 
-    // Gray Scale
+    // MARK: Gray Scale
 
     static let gray00 = asset("gray-00")
     static let gray100 = asset("gray-100")
@@ -33,7 +33,7 @@ extension UIColor {
     static let gray900 = asset("gray-900")
     static let gray1000 = asset("gray-1000")
 
-    // Primary
+    // MARK: Primary
 
     static let carrot100 = asset("carrot-100")
     static let carrot200 = asset("carrot-200")
@@ -46,28 +46,28 @@ extension UIColor {
     static let carrot900 = asset("carrot-900")
     static let carrot1000 = asset("carrot-1000")
 
-    // Positive
+    // MARK: Positive
 
     static let green200 = asset("green-200")
     static let green400 = asset("green-400")
     static let green600 = asset("green-600")
     static let green800 = asset("green-800")
 
-    // Warning
+    // MARK: Warning
 
     static let yellow200 = asset("yellow-200")
     static let yellow400 = asset("yellow-400")
     static let yellow600 = asset("yellow-600")
     static let yellow800 = asset("yellow-800")
 
-    // Critical
+    // MARK: Critical
 
     static let red200 = asset("red-200")
     static let red400 = asset("red-400")
     static let red600 = asset("red-600")
     static let red800 = asset("red-800")
 
-    // Informative
+    // MARK: Informative
 
     static let blue200 = asset("blue-200")
     static let blue400 = asset("blue-400")
