@@ -32,6 +32,7 @@ extension UIColor {
     static let gray800 = asset("gray-800")
     static let gray900 = asset("gray-900")
     static let gray1000 = asset("gray-1000")
+    static let grayProfile = asset("gray-profile")
 
     // MARK: Primary
 
