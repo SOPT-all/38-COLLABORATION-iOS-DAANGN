@@ -208,7 +208,7 @@ final class MapViewController: UIViewController {
     }
 
     
-    // MARK: 함수
+    // MARK: 버튼 함수
     @objc
     private func listButtonDidTap() {
         let listViewController = ListViewController()
