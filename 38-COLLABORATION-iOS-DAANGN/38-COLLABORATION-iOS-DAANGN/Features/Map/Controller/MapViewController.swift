@@ -13,6 +13,10 @@ import Then
 final class MapViewController: UIViewController {
 
     // MARK: UI
+    
+    private let statusBarBackgroundView = UIView().then {
+        $0.backgroundColor = .white
+    }
 
     private let headerView = SimpleHeader()
     
@@ -122,6 +126,7 @@ final class MapViewController: UIViewController {
 
     private func setupHierarchy() {
         view.addSubview(mapImageView)
+        view.addSubview(statusBarBackgroundView)
         view.addSubview(headerView)
         
         view.addSubview(listButton)
@@ -140,6 +145,11 @@ final class MapViewController: UIViewController {
     private func setupLayout() {
         mapImageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+        
+        statusBarBackgroundView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(47)
         }
         
         headerView.snp.makeConstraints {
