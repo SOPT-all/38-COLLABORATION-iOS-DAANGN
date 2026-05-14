@@ -55,7 +55,7 @@ final class TradeLocationCell: UICollectionViewCell {
 private extension TradeLocationCell {
     
     func setUI() {
-        addSubviews(tradeLocationTitle, tradeLocation, chevron, map, viewCount, report)
+        contentView.addSubviews(tradeLocationTitle, tradeLocation, chevron, map, viewCount, report)
     }
     
     func setLayout() {

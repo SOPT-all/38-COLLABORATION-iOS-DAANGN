@@ -99,7 +99,7 @@ private extension ProductDetailView {
             case .descript:
                 return self.createDescriptSection()
             case .tradeLocation:
-                return self.createTradeLocation()
+                return self.createTradeLocationSection()
             }
         }
     }
@@ -160,7 +160,7 @@ private extension ProductDetailView {
         return section
     }
     
-    func createTradeLocation() ->
+    func createTradeLocationSection() ->
     NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(235)), subitems: [item])
