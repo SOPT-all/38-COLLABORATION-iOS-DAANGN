@@ -14,6 +14,8 @@ final class MapViewController: UIViewController {
 
     // MARK: UI
 
+    private let headerView = SimpleHeader()
+    
     private let mapImageView = UIImageView().then {
         $0.image = UIImage(named: "mapImageView")
         $0.contentMode = .scaleAspectFill
@@ -120,6 +122,8 @@ final class MapViewController: UIViewController {
 
     private func setupHierarchy() {
         view.addSubview(mapImageView)
+        view.addSubview(headerView)
+        
         view.addSubview(listButton)
         view.addSubview(currentLocationButton)
         
@@ -136,6 +140,12 @@ final class MapViewController: UIViewController {
     private func setupLayout() {
         mapImageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+        
+        headerView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(150)
         }
 
         listButton.snp.makeConstraints {
