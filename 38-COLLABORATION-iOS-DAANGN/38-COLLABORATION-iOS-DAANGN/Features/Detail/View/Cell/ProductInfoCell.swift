@@ -11,7 +11,7 @@ import SnapKit
 import Then
 
 final class ProductInfoCell: UICollectionViewCell {
-    static let identifier = "productInformation"
+    static let identifier = "ProductInfoCell"
     
     private let productTitle = UILabel().then {
         $0.setText("", style: .h3Bold)
@@ -71,6 +71,7 @@ private extension ProductInfoCell {
         dangnPayIcon.snp.makeConstraints {
             $0.centerY.equalTo(productPrice)
             $0.leading.equalTo(productPrice.snp.trailing).offset(10)
+            $0.width.equalTo(38)
         }
         tradeLocation.snp.makeConstraints {
             $0.top.equalTo(productPrice.snp.bottom).offset(8)

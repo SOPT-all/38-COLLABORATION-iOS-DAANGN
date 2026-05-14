@@ -23,7 +23,7 @@ final class SellerProfileCell: UICollectionViewCell {
         $0.setText("", style: .body1Medium)
     }
     
-    private let sellerAdress = UILabel().then {
+    private let sellerAddress = UILabel().then {
         $0.setText("", style: .label3Regular, color: .gray100)
     }
     
@@ -59,7 +59,7 @@ final class SellerProfileCell: UICollectionViewCell {
 private extension SellerProfileCell {
     
     func setUI() {
-        contentView.addSubviews(profileImage, sellerName, sellerAdress, trustScoreIcon, trustScore, trustScoreLabel, divider)
+        contentView.addSubviews(profileImage, sellerName, sellerAddress, trustScoreIcon, trustScore, trustScoreLabel, divider)
     }
     
     func setLayout() {
@@ -72,7 +72,7 @@ private extension SellerProfileCell {
             $0.top.equalToSuperview().inset(25)
             $0.leading.equalTo(profileImage.snp.trailing).offset(8)
         }
-        sellerAdress.snp.makeConstraints {
+        sellerAddress.snp.makeConstraints {
             $0.top.equalTo(sellerName.snp.bottom)
             $0.leading.equalTo(profileImage.snp.trailing).offset(8)
         }
@@ -104,7 +104,7 @@ extension SellerProfileCell {
         score: String
     ) {
         sellerName.setText(name, style: .body1Medium)
-        sellerAdress.setText(address, style: .label3Regular, color: .gray700)
+        sellerAddress.setText(address, style: .label3Regular, color: .gray700)
         trustScore.setText(score, style: .body1Bold, color: .carrot600)
     }
 }
