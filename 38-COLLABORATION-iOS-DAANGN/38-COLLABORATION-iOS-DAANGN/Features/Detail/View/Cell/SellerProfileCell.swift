@@ -14,7 +14,7 @@ final class SellerProfileCell: UICollectionViewCell {
     static let identifier = "SellerProfileCell"
     
     private let profileImage = UIView().then {
-        $0.backgroundColor = .gray300
+        $0.backgroundColor = .grayProfile
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 20
     }

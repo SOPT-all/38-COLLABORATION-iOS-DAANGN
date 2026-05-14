@@ -100,6 +100,10 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             return 1
         case .productInformation:
             return 1
+        case .descript:
+            return 1
+        case .tradeLocation:
+            return 1
         }
     }
     
@@ -141,6 +145,7 @@ extension ProductDetailViewController: UICollectionViewDataSource {
                 score: "\(seller.mannerTemperature)°C"
             )
             return cell
+            
         case .productInformation:
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ProductInfoCell.identifier,
@@ -155,6 +160,33 @@ extension ProductDetailViewController: UICollectionViewDataSource {
                 location: productDetailData.tradeLocation,
                 time: productDetailData.lastBumpedAt,
                 tags: productDetailData.tags
+            )
+            return cell
+            
+        case .descript:
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: DescriptionCell.identifier,
+                for: indexPath
+            ) as? DescriptionCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.dataBind(
+                content: productDetailData.content
+            )
+            return cell
+            
+        case .tradeLocation:
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: TradeLocationCell.identifier,
+                for: indexPath
+            ) as? TradeLocationCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.dataBind(
+                location: productDetailData.tradeLocation,
+                count: productDetailData.viewCount
             )
             return cell
         }
