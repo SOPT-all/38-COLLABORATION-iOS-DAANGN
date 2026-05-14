@@ -14,6 +14,8 @@ enum ProductDetailSection: Int, CaseIterable {
     case imageCarousel
     case sellerProfile
     case productInformation
+    case descript
+    case tradeLocation
 }
 
 final class ProductDetailView: UIView {
@@ -40,6 +42,14 @@ final class ProductDetailView: UIView {
         $0.register(
             ProductInfoCell.self,
             forCellWithReuseIdentifier: ProductInfoCell.identifier
+        )
+        $0.register(
+            DescriptionCell.self,
+            forCellWithReuseIdentifier: DescriptionCell.identifier
+        )
+        $0.register(
+            TradeLocationCell.self,
+            forCellWithReuseIdentifier: TradeLocationCell.identifier
         )
         
     }
@@ -86,6 +96,10 @@ private extension ProductDetailView {
                 return self.createSellerProfileSection()
             case .productInformation:
                 return self.createProductInformationSection()
+            case .descript:
+                return self.createDescriptSection()
+            case .tradeLocation:
+                return self.createTradeLocation()
             }
         }
     }
@@ -134,6 +148,22 @@ private extension ProductDetailView {
     NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(130)), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        return section
+    }
+    
+    func createDescriptSection() ->
+    NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(30)))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(30)), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        return section
+    }
+    
+    func createTradeLocation() ->
+    NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(235)), subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         return section
     }
