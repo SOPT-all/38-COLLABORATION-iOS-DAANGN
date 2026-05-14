@@ -153,7 +153,8 @@ extension ProductDetailViewController: UICollectionViewDataSource {
                 name: productDetailData.title,
                 price: productDetailData.price,
                 location: productDetailData.tradeLocation,
-                time: productDetailData.lastBumpedAt
+                time: productDetailData.lastBumpedAt,
+                tags: productDetailData.tags
             )
             return cell
         }
