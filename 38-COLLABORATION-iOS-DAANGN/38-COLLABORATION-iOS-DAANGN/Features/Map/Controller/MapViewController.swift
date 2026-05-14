@@ -143,7 +143,7 @@ final class MapViewController: UIViewController {
         }
         
         headerView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.top.equalToSuperview().offset(47)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(110)
         }
