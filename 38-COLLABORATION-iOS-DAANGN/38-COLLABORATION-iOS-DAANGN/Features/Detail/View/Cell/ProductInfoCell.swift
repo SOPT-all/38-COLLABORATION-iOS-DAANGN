@@ -39,6 +39,8 @@ final class ProductInfoCell: UICollectionViewCell {
         
     }
     
+    private let tagListView = ProductStateTagListView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -54,7 +56,7 @@ final class ProductInfoCell: UICollectionViewCell {
 private extension ProductInfoCell {
     
     func setUI() {
-        contentView.addSubviews(productTitle, productPrice, dangnPayIcon, tradeLocation, dot, bumpTime)
+        contentView.addSubviews(productTitle, productPrice, dangnPayIcon, tradeLocation, dot, bumpTime, tagListView)
     }
     
     func setLayout() {
@@ -81,7 +83,38 @@ private extension ProductInfoCell {
         }
         bumpTime.snp.makeConstraints {
             $0.top.equalTo(productPrice.snp.bottom).offset(8)
-            $0.leading.equalTo(dot.snp.leading).offset(3)
+            $0.leading.equalTo(dot.snp.trailing).offset(3)
+        }
+        tagListView.snp.makeConstraints {
+            $0.top.equalTo(tradeLocation.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(23)
+        }
+    }
+    
+    func formattedElapsedTime(from dateString: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone = .current
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        
+        guard let date = dateFormatter.date(from: dateString) else {
+            return dateString
+        }
+        
+        let elapsedSeconds = max(0, Int(Date().timeIntervalSince(date)))
+        let elapsedMinutes = elapsedSeconds / 60
+        let elapsedHours = elapsedMinutes / 60
+        let elapsedDays = elapsedHours / 24
+        
+        if elapsedMinutes < 1 {
+            return "끌올 방금 전"
+        } else if elapsedMinutes < 60 {
+            return "끌올 \(elapsedMinutes)분 전"
+        } else if elapsedHours < 24 {
+            return "끌올 \(elapsedHours)시간 전"
+        } else {
+            return "끌올 \(elapsedDays)일 전"
         }
     }
 }
@@ -92,11 +125,13 @@ extension ProductInfoCell {
         name: String,
         price: Int,
         location: String,
-        time: String
+        time: String,
+        tags: [String]
     ) {
         productTitle.setText(name, style: .h3Bold)
         productPrice.setText("\(price.formatted())원", style: .h5Bold)
         tradeLocation.setText(location, style: .label3Regular, color: .gray700)
-        bumpTime.setText(time, style: .label3Regular, color: .gray700)
+        bumpTime.setText(formattedElapsedTime(from: time), style: .label3Regular, color: .gray700)
+        tagListView.dataBind(tags: tags)
     }
 }
