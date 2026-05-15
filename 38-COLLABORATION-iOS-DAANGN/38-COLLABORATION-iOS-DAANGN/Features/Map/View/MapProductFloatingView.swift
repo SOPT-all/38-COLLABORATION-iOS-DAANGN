@@ -146,15 +146,15 @@ private extension MapProductFloatingView {
         }
 
         heartImageView.snp.makeConstraints {
-            $0.centerY.equalTo(tagStackView)
             $0.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(4)
             $0.size.equalTo(24)
         }
 
         tagStackView.snp.makeConstraints {
             $0.leading.equalToSuperview()
             $0.bottom.equalToSuperview()
-            $0.trailing.lessThanOrEqualToSuperview()
+            $0.trailing.lessThanOrEqualTo(heartImageView.snp.leading).offset(-8)
             $0.height.equalTo(20)
         }
     }
