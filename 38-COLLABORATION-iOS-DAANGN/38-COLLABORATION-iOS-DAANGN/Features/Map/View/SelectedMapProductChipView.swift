@@ -16,7 +16,7 @@ final class SelectedMapProductChipView: UIView {
 
     private let containerView = UIView().then {
         $0.backgroundColor = .gray1000
-        $0.layer.cornerRadius = 15
+        $0.layer.cornerRadius = 20
         $0.clipsToBounds = true
     }
 
@@ -36,6 +36,7 @@ final class SelectedMapProductChipView: UIView {
     private let titleLabel = UILabel().then {
         $0.numberOfLines = 1
         $0.lineBreakMode = .byTruncatingTail
+        $0.clipsToBounds = false
     }
 
     private let priceLabel = UILabel().then {
@@ -89,12 +90,12 @@ private extension SelectedMapProductChipView {
         }
 
         titleLabel.snp.makeConstraints {
-            $0.width.equalTo(80)
+            $0.width.equalTo(85)
             $0.height.equalTo(14)
         }
 
         priceLabel.snp.makeConstraints {
-            $0.width.equalTo(45)
+            $0.width.equalTo(57)
             $0.height.equalTo(18)
         }
     }
@@ -107,6 +108,9 @@ private extension SelectedMapProductChipView {
             style: .label1Regular,
             color: .gray00
         )
+
+        titleLabel.numberOfLines = 1
+        titleLabel.lineBreakMode = .byTruncatingTail
 
         priceLabel.attributedText = NSAttributedString.styled(
             price,
