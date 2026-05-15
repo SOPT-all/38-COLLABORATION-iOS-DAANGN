@@ -12,7 +12,7 @@ import SnapKit
 
 class FullHeader: UIView {
     
-    private let searchBar = SearchBarHeader()
+    let searchBar = SearchBarHeader()
     private let categoryTabBar = CategoryTabBar()
     private let filterChip = FilterChip()
     private let filterSortBar = FilterSortBar()
