@@ -59,6 +59,10 @@ private extension FilterBottomSheetViewController {
 
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handleBarDidPan))
         filterView.addHandleBarGesture(panGesture)
+
+        filterView.addCloseButtonTarget(self, action: #selector(closeButtonDidTap))
+        filterView.resetButton.addTarget(self, action: #selector(resetButtonDidTap), for: .touchUpInside)
+        filterView.applyButton.addTarget(self, action: #selector(applyButtonDidTap), for: .touchUpInside)
     }
 
     func setUI() {
@@ -107,6 +111,22 @@ private extension FilterBottomSheetViewController {
 
     @objc
     private func dimmedViewDidTap() {
+        dismissBottomSheet()
+    }
+
+    @objc
+    private func closeButtonDidTap() {
+        dismissBottomSheet()
+    }
+
+    @objc
+    private func resetButtonDidTap() {
+        // TODO: 필터 초기화 로직 연결
+    }
+
+    @objc
+    private func applyButtonDidTap() {
+        // TODO: 필터 적용 로직 연결
         dismissBottomSheet()
     }
 
