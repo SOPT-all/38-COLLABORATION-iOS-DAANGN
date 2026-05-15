@@ -11,6 +11,8 @@ import SnapKit
 
 final class BottomSheetViewController: UIViewController {
     
+    var onSendButtonTapped: (() -> Void)?
+    
     private var isAppearAnimationCompleted = false
     private let dimmedView = UIView()
     private let bottomSheetView = BottomSheetView()
@@ -50,7 +52,9 @@ private extension BottomSheetViewController {
         bottomSheetView.clipsToBounds = true
         dimmedView.alpha = 0
         bottomSheetView.onSendButtonTapped = { [weak self] in
-            self?.dismissBottomSheet()
+            self?.dismissBottomSheet(completion: {
+                self?.onSendButtonTapped?()
+            })
         }
         
         let dimmedTapGesture = UITapGestureRecognizer(target: self, action: #selector(dimmedViewDidTap))
@@ -113,7 +117,7 @@ private extension BottomSheetViewController {
         }
     }
     
-    private func dismissBottomSheet() {
+    private func dismissBottomSheet(completion: (() -> Void)? = nil) {
         UIView.animate(withDuration: 0.25) {
             self.dimmedView.alpha = 0
             self.bottomSheetView.transform = CGAffineTransform(
@@ -122,6 +126,7 @@ private extension BottomSheetViewController {
             )
         } completion: { _ in
             self.dismiss(animated: false)
+            completion?()
         }
     }
 }
