@@ -12,13 +12,15 @@ extension UILabel {
         _ text: String,
         style: FontStyle,
         color: UIColor = .gray1000,
-        alignment: NSTextAlignment = .natural
+        alignment: NSTextAlignment = .natural,
+        lineBreakMode: NSLineBreakMode? = nil
     ) {
         self.attributedText = .styled(
             text,
             style: style,
             color: color,
-            alignment: alignment
+            alignment: alignment,
+            lineBreakMode: lineBreakMode
         )
     }
 }
@@ -28,13 +30,15 @@ extension UITextView {
         _ text: String,
         style: FontStyle,
         color: UIColor = .gray1000,
-        alignment: NSTextAlignment = .natural
+        alignment: NSTextAlignment = .natural,
+        lineBreakMode: NSLineBreakMode? = nil
     ) {
         self.attributedText = .styled(
             text,
             style: style,
             color: color,
-            alignment: alignment
+            alignment: alignment,
+            lineBreakMode: lineBreakMode
         )
     }
 }
@@ -44,13 +48,15 @@ extension UITextField {
         _ text: String,
         style: FontStyle,
         color: UIColor = .gray1000,
-        alignment: NSTextAlignment = .natural
+        alignment: NSTextAlignment = .natural,
+        lineBreakMode: NSLineBreakMode? = nil
     ) {
         self.attributedText = .styled(
             text,
             style: style,
             color: color,
-            alignment: alignment
+            alignment: alignment,
+            lineBreakMode: lineBreakMode
         )
     }
 
@@ -75,14 +81,16 @@ extension UIButton {
         style: FontStyle,
         color: UIColor = .gray1000,
         for state: UIControl.State = .normal,
-        alignment: NSTextAlignment = .natural
+        alignment: NSTextAlignment = .natural,
+        lineBreakMode: NSLineBreakMode? = nil
     ) {
         self.setAttributedTitle(
             .styled(
                 title,
                 style: style,
                 color: color,
-                alignment: alignment
+                alignment: alignment,
+                lineBreakMode: lineBreakMode
             ),
             for: state
         )

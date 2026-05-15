@@ -16,6 +16,7 @@ enum ProductDetailSection: Int, CaseIterable {
     case productInformation
     case descript
     case tradeLocation
+    case recommendItem
 }
 
 final class ProductDetailView: UIView {
@@ -51,7 +52,15 @@ final class ProductDetailView: UIView {
             TradeLocationCell.self,
             forCellWithReuseIdentifier: TradeLocationCell.identifier
         )
-        
+        $0.register(
+            RecommendItemCell.self,
+            forCellWithReuseIdentifier: RecommendItemCell.identifier
+        )
+        $0.register(
+            RecommendHeaderView.self,
+            forSupplementaryViewOfKind: RecommendHeaderView.elementKind,
+            withReuseIdentifier: RecommendHeaderView.identifier
+        )
     }
     
     override init(frame: CGRect) {
@@ -100,6 +109,8 @@ private extension ProductDetailView {
                 return self.createDescriptSection()
             case .tradeLocation:
                 return self.createTradeLocationSection()
+            case .recommendItem:
+                return self.createRecommendItemSection()
             }
         }
     }
@@ -165,6 +176,22 @@ private extension ProductDetailView {
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(235)), subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
+        return section
+    }
+    func createRecommendItemSection() ->
+    NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(101), heightDimension: .absolute(173)), subitems: [item])
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(23)),
+            elementKind: RecommendHeaderView.elementKind,
+            alignment: .top
+        )
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 16, bottom: 20, trailing: 16)
+        section.interGroupSpacing = 10
+        section.orthogonalScrollingBehavior = .continuous
+        section.boundarySupplementaryItems = [header]
         return section
     }
 }

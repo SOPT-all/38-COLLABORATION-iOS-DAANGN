@@ -15,6 +15,7 @@ final class ProductDetailViewController: UIViewController {
     private weak var imageIndicatorView: ImageIndicatorView?
     private let productDetailData = ProductDetailData.dummy
     private let productDetailView = ProductDetailView()
+    private let recommendProduct = RecommendProduct.dummyList
     private let bottomBarView = BottomBarView()
     
     override func viewDidLoad() {
@@ -104,6 +105,8 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             return 1
         case .tradeLocation:
             return 1
+        case .recommendItem:
+            return recommendProduct.count
         }
     }
     
@@ -189,6 +192,23 @@ extension ProductDetailViewController: UICollectionViewDataSource {
                 count: productDetailData.viewCount
             )
             return cell
+        case .recommendItem:
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: RecommendItemCell.identifier,
+                for: indexPath
+            ) as? RecommendItemCell else {
+                return UICollectionViewCell()
+            }
+            
+            let product = recommendProduct[indexPath.item]
+            
+            cell.dataBind(
+                imgURL: product.thumbnailUrl,
+                title: product.title,
+                price: product.price,
+                seller: product.seller
+            )
+            return cell
         }
     }
 
@@ -198,20 +218,36 @@ extension ProductDetailViewController: UICollectionViewDataSource {
         viewForSupplementaryElementOfKind kind: String,
         at indexPath: IndexPath
     ) -> UICollectionReusableView {
-        guard kind == ImageIndicatorView.elementKind,
-              let indicatorView = collectionView.dequeueReusableSupplementaryView(
+        switch kind {
+        case ImageIndicatorView.elementKind:
+            guard let indicatorView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
                 withReuseIdentifier: ImageIndicatorView.identifier,
                 for: indexPath
-              ) as? ImageIndicatorView else {
+            ) as? ImageIndicatorView else {
+                return UICollectionReusableView()
+            }
+            
+            indicatorView.dataBind(
+                currentIndex: currentImageIndex,
+                totalCount: productDetailData.imageURLs.count
+            )
+            imageIndicatorView = indicatorView
+            return indicatorView
+            
+        case RecommendHeaderView.elementKind:
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: RecommendHeaderView.identifier,
+                for: indexPath
+            ) as? RecommendHeaderView else {
+                return UICollectionReusableView()
+            }
+            
+            return headerView
+            
+        default:
             return UICollectionReusableView()
         }
-        
-        indicatorView.dataBind(
-            currentIndex: currentImageIndex,
-            totalCount: productDetailData.imageURLs.count
-        )
-        imageIndicatorView = indicatorView
-        return indicatorView
     }
 }

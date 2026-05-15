@@ -13,12 +13,16 @@ extension NSAttributedString {
         _ text: String,
         style: FontStyle,
         color: UIColor = UIColor(red: 26/255, green: 28/255, blue: 32/255, alpha: 1),
-        alignment: NSTextAlignment = .natural
+        alignment: NSTextAlignment = .natural,
+        lineBreakMode: NSLineBreakMode? = nil
     ) -> NSAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.minimumLineHeight = style.lineHeight
         paragraphStyle.maximumLineHeight = style.lineHeight
         paragraphStyle.alignment = alignment
+        if let lineBreakMode {
+            paragraphStyle.lineBreakMode = lineBreakMode
+        }
         
         return NSAttributedString(
             string: text,
