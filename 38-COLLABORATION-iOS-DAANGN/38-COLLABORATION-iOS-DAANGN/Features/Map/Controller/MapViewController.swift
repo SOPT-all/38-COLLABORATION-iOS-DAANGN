@@ -77,7 +77,7 @@ final class MapViewController: UIViewController {
     }
     
     
-    // MARK: 매물 칩 하드코딩
+    // MARK: 비선택된 매물 칩 하드코딩
     
     private let firstProductChipView = MapProductChipView(
         imageName: "img_product6",
@@ -106,6 +106,38 @@ final class MapViewController: UIViewController {
         price: "12,900원",
         isLiked: true
     )
+    
+    // MARK: 선택된 매물 칩 하드코딩
+    
+    private let selectedFirstProductChipView = SelectedMapProductChipView(
+        imageName: "img_product6",
+        title: "온둘라 LED 단스탠드",
+        price: "28,000"
+    )
+
+    private let selectedSecondProductChipView = SelectedMapProductChipView(
+        imageName: "img_product5",
+        title: "이케아 조명",
+        price: "9,400"
+    )
+
+    private let selectedThirdProductChipView = SelectedMapProductChipView(
+        imageName: "img_product4",
+        title: "웨이브 테이블 단스탠드 조명",
+        price: "23,000"
+    )
+
+    private let selectedFourthProductChipView = SelectedMapProductChipView(
+        imageName: "img_product1",
+        title: "무드등 스탠드 조명",
+        price: "17,000"
+    )
+
+    private let selectedFifthProductChipView = SelectedMapProductChipView(
+        imageName: "img_product2",
+        title: "페이퍼램프 급처",
+        price: "12,900"
+    )
 
     // MARK: 라이프싸이클
 
@@ -123,6 +155,12 @@ final class MapViewController: UIViewController {
 
     private func setupStyle() {
         view.backgroundColor = .white
+        
+        selectedFirstProductChipView.isHidden = true
+        selectedSecondProductChipView.isHidden = true
+        selectedThirdProductChipView.isHidden = true
+        selectedFourthProductChipView.isHidden = true
+        selectedFifthProductChipView.isHidden = true
     }
 
     private func setupHierarchy() {
@@ -133,12 +171,19 @@ final class MapViewController: UIViewController {
         view.addSubview(listButton)
         view.addSubview(currentLocationButton)
         
-        // MARK: 매물 칩
+        // MARK: 비선택된 매물 칩
         view.addSubview(firstProductChipView)
         view.addSubview(secondProductChipView)
         view.addSubview(thirdProductChipView)
         view.addSubview(fourthProductChipView)
         view.addSubview(fifthProductChipView)
+        
+        // MARK: 선택된 매물 칩
+        view.addSubview(selectedFirstProductChipView)
+        view.addSubview(selectedSecondProductChipView)
+        view.addSubview(selectedThirdProductChipView)
+        view.addSubview(selectedFourthProductChipView)
+        view.addSubview(selectedFifthProductChipView)
         
         
     }
@@ -197,6 +242,32 @@ final class MapViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(370)
             $0.centerX.equalToSuperview()
         }
+        
+        // MARK: 선택된 매물 칩 UI 화면에 올리기
+        selectedFirstProductChipView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(145)
+            $0.leading.equalToSuperview().offset(37)
+        }
+
+        selectedSecondProductChipView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(110)
+            $0.trailing.equalToSuperview().inset(15)
+        }
+
+        selectedThirdProductChipView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(250)
+            $0.trailing.equalToSuperview().inset(80)
+        }
+
+        selectedFourthProductChipView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(300)
+            $0.leading.equalToSuperview().offset(50)
+        }
+
+        selectedFifthProductChipView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(370)
+            $0.centerX.equalToSuperview()
+        }
     }
     
     private func setupAction() {
@@ -204,6 +275,22 @@ final class MapViewController: UIViewController {
             self,
             action: #selector(listButtonDidTap),
             for: .touchUpInside
+        )
+        
+        firstProductChipView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(firstProductChipDidTap))
+        )
+        secondProductChipView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(secondProductChipDidTap))
+        )
+        thirdProductChipView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(thirdProductChipDidTap))
+        )
+        fourthProductChipView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(fourthProductChipDidTap))
+        )
+        fifthProductChipView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(fifthProductChipDidTap))
         )
     }
 
@@ -221,5 +308,54 @@ final class MapViewController: UIViewController {
 
         navigationController?.view.layer.add(transition, forKey: kCATransition)
         navigationController?.pushViewController(listViewController, animated: false)
+    }
+    
+    private func deselectAllProductChips() {
+        firstProductChipView.isHidden = false
+        secondProductChipView.isHidden = false
+        thirdProductChipView.isHidden = false
+        fourthProductChipView.isHidden = false
+        fifthProductChipView.isHidden = false
+
+        selectedFirstProductChipView.isHidden = true
+        selectedSecondProductChipView.isHidden = true
+        selectedThirdProductChipView.isHidden = true
+        selectedFourthProductChipView.isHidden = true
+        selectedFifthProductChipView.isHidden = true
+    }
+
+    @objc
+    private func firstProductChipDidTap() {
+        deselectAllProductChips()
+        firstProductChipView.isHidden = true
+        selectedFirstProductChipView.isHidden = false
+    }
+
+    @objc
+    private func secondProductChipDidTap() {
+        deselectAllProductChips()
+        secondProductChipView.isHidden = true
+        selectedSecondProductChipView.isHidden = false
+    }
+
+    @objc
+    private func thirdProductChipDidTap() {
+        deselectAllProductChips()
+        thirdProductChipView.isHidden = true
+        selectedThirdProductChipView.isHidden = false
+    }
+
+    @objc
+    private func fourthProductChipDidTap() {
+        deselectAllProductChips()
+        fourthProductChipView.isHidden = true
+        selectedFourthProductChipView.isHidden = false
+    }
+
+    @objc
+    private func fifthProductChipDidTap() {
+        deselectAllProductChips()
+        fifthProductChipView.isHidden = true
+        selectedFifthProductChipView.isHidden = false
     }
 }
