@@ -207,8 +207,8 @@ final class MapViewController: UIViewController {
         listButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            $0.width.equalTo(80)
-            $0.height.equalTo(34)
+            $0.width.equalTo(85)
+            $0.height.equalTo(33)
         }
         
         currentLocationButton.snp.makeConstraints {
