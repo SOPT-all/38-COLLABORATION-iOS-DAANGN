@@ -39,6 +39,7 @@ private extension BannerCell {
     }
     
     private func setStyle() {
+        selectionStyle = .none
         contentView.backgroundColor = .gray100
         mapDaangn.do {
             $0.image = UIImage(named: "map_daangn")

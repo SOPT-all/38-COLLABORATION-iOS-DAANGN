@@ -47,7 +47,7 @@ private extension ListTableViewCell {
     private func setStyle() {
         selectionStyle = .none
         thumbnail.do {
-            $0.image = UIImage(named: "lamp-ex.png")
+            $0.image = UIImage(named: "lamp-ex")
             $0.contentMode = .scaleAspectFill
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 8
