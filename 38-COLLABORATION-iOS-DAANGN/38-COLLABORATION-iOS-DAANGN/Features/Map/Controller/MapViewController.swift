@@ -24,6 +24,7 @@ final class MapViewController: UIViewController {
         $0.image = UIImage(named: "mapImageView")
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
+        $0.isUserInteractionEnabled = true
     }
 
     private let listButton = UIButton(type: .system).then {
@@ -294,12 +295,18 @@ final class MapViewController: UIViewController {
     }
     
     private func setupAction() {
+        let mapTapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(mapDidTap)
+        )
+        mapImageView.addGestureRecognizer(mapTapGesture)
+
         listButton.addTarget(
             self,
             action: #selector(listButtonDidTap),
             for: .touchUpInside
         )
-        
+
         firstProductChipView.addGestureRecognizer(
             UITapGestureRecognizer(target: self, action: #selector(firstProductChipDidTap))
         )
@@ -315,8 +322,6 @@ final class MapViewController: UIViewController {
         fifthProductChipView.addGestureRecognizer(
             UITapGestureRecognizer(target: self, action: #selector(fifthProductChipDidTap))
         )
-        
-        
     }
 
     
