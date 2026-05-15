@@ -78,7 +78,7 @@ private extension SelectedMapProductChipView {
         }
 
         productImageView.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(4)
+            $0.leading.equalToSuperview().inset(8)
             $0.centerY.equalToSuperview()
             $0.size.equalTo(24)
         }
