@@ -77,6 +77,20 @@ final class MapViewController: UIViewController {
     }
     
     
+    private let products = MapProduct.dummyList
+
+    private let floatingView = MapProductFloatingView().then {
+        $0.isHidden = true
+        $0.alpha = 0
+    }
+
+    private var selectedProductIndex: Int?
+
+    private var listButtonBottomConstraint: Constraint?
+    
+    private var currentLocationButtonBottomConstraint: Constraint?
+    
+    
     // MARK: 비선택된 매물 칩 하드코딩
     
     private let firstProductChipView = MapProductChipView(
@@ -168,6 +182,8 @@ final class MapViewController: UIViewController {
         view.addSubview(statusBarBackgroundView)
         view.addSubview(headerView)
         
+        view.addSubview(floatingView)
+        
         view.addSubview(listButton)
         view.addSubview(currentLocationButton)
         
@@ -206,15 +222,22 @@ final class MapViewController: UIViewController {
 
         listButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            listButtonBottomConstraint = $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).constraint
             $0.width.equalTo(85)
             $0.height.equalTo(33)
         }
-        
+
         currentLocationButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(15)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14)
+            currentLocationButtonBottomConstraint = $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(14).constraint
             $0.size.equalTo(48)
+        }
+
+        floatingView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            $0.width.equalTo(347)
+            $0.height.equalTo(140)
         }
         
         // MARK: 매물 칩 UI 화면에 올리기
@@ -292,6 +315,8 @@ final class MapViewController: UIViewController {
         fifthProductChipView.addGestureRecognizer(
             UITapGestureRecognizer(target: self, action: #selector(fifthProductChipDidTap))
         )
+        
+        
     }
 
     
@@ -326,36 +351,88 @@ final class MapViewController: UIViewController {
 
     @objc
     private func firstProductChipDidTap() {
-        deselectAllProductChips()
-        firstProductChipView.isHidden = true
-        selectedFirstProductChipView.isHidden = false
+        selectProduct(at: 0)
     }
 
     @objc
     private func secondProductChipDidTap() {
-        deselectAllProductChips()
-        secondProductChipView.isHidden = true
-        selectedSecondProductChipView.isHidden = false
+        selectProduct(at: 1)
     }
 
     @objc
     private func thirdProductChipDidTap() {
-        deselectAllProductChips()
-        thirdProductChipView.isHidden = true
-        selectedThirdProductChipView.isHidden = false
+        selectProduct(at: 2)
     }
 
     @objc
     private func fourthProductChipDidTap() {
-        deselectAllProductChips()
-        fourthProductChipView.isHidden = true
-        selectedFourthProductChipView.isHidden = false
+        selectProduct(at: 3)
     }
 
     @objc
     private func fifthProductChipDidTap() {
+        selectProduct(at: 4)
+    }
+    
+    private func selectProduct(at index: Int) {
         deselectAllProductChips()
-        fifthProductChipView.isHidden = true
-        selectedFifthProductChipView.isHidden = false
+
+        selectedProductIndex = index
+
+        switch index {
+        case 0:
+            firstProductChipView.isHidden = true
+            selectedFirstProductChipView.isHidden = false
+        case 1:
+            secondProductChipView.isHidden = true
+            selectedSecondProductChipView.isHidden = false
+        case 2:
+            thirdProductChipView.isHidden = true
+            selectedThirdProductChipView.isHidden = false
+        case 3:
+            fourthProductChipView.isHidden = true
+            selectedFourthProductChipView.isHidden = false
+        case 4:
+            fifthProductChipView.isHidden = true
+            selectedFifthProductChipView.isHidden = false
+        default:
+            return
+        }
+
+        showFloatingView(product: products[index])
+    }
+
+    private func showFloatingView(product: MapProduct) {
+        floatingView.configure(product: product)
+
+        floatingView.isHidden = false
+
+        listButtonBottomConstraint?.update(offset: -148)
+        currentLocationButtonBottomConstraint?.update(inset: 154)
+
+        UIView.animate(withDuration: 0.25) {
+            self.floatingView.alpha = 1
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    private func hideFloatingView() {
+        selectedProductIndex = nil
+        deselectAllProductChips()
+
+        listButtonBottomConstraint?.update(offset: 0)
+        currentLocationButtonBottomConstraint?.update(inset: 14)
+
+        UIView.animate(withDuration: 0.2) {
+            self.floatingView.alpha = 0
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+            self.floatingView.isHidden = true
+        }
+    }
+
+    @objc
+    private func mapDidTap() {
+        hideFloatingView()
     }
 }

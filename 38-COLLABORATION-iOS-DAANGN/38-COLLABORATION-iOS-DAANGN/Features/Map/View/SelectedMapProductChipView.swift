@@ -60,6 +60,8 @@ final class SelectedMapProductChipView: UIView {
 
 private extension SelectedMapProductChipView {
 
+    // MARK: 셋업
+    
     func setupHierarchy() {
         addSubview(containerView)
 
