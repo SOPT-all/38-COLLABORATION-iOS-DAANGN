@@ -126,7 +126,6 @@ private extension FilterBottomSheetViewController {
 
     @objc
     private func applyButtonDidTap() {
-        // TODO: 필터 적용 로직 연결
         dismissBottomSheet()
     }
 
