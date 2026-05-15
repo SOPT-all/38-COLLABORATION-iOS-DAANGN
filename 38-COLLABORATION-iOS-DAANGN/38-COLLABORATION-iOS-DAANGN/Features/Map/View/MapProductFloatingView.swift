@@ -146,7 +146,7 @@ private extension MapProductFloatingView {
         }
 
         heartImageView.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.centerY.equalTo(tagStackView)
             $0.trailing.equalToSuperview()
             $0.size.equalTo(24)
         }
@@ -155,7 +155,7 @@ private extension MapProductFloatingView {
             $0.leading.equalToSuperview()
             $0.bottom.equalToSuperview()
             $0.trailing.lessThanOrEqualToSuperview()
-            $0.height.equalTo(26)
+            $0.height.equalTo(20)
         }
     }
 
@@ -180,10 +180,10 @@ private extension MapProductFloatingView {
 
     func makeTagLabel(text: String) -> UILabel {
         let label = MapPaddingLabel(
-            topInset: 5,
-            bottomInset: 5,
-            leftInset: 8,
-            rightInset: 8
+            topInset: 3,
+            bottomInset: 3,
+            leftInset: 4,
+            rightInset: 4
         )
 
         label.backgroundColor = .carrot100
