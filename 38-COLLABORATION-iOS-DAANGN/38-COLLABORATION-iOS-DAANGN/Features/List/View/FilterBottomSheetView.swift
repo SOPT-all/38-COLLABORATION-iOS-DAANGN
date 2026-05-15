@@ -25,6 +25,10 @@ final class FilterBottomSheetView: UIView {
 
     private var gradientLayer: CAGradientLayer?
 
+    private var allChips: [ChipButton] = []
+    private var minPriceTextField = UITextField()
+    private var maxPriceTextField = UITextField()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setStyle()
@@ -145,8 +149,10 @@ private extension FilterBottomSheetView {
         let titleLabel = makeSectionTitleLabel("가격")
         let titleWrapper = makeTitleWrapper(titleLabel)
 
-        let minField = makePriceTextField(placeholder: "최소 금액")
-        let maxField = makePriceTextField(placeholder: "최대 금액")
+        minPriceTextField = makePriceTextField(placeholder: "최소 금액")
+        maxPriceTextField = makePriceTextField(placeholder: "최대 금액")
+        let minField = minPriceTextField
+        let maxField = maxPriceTextField
 
         let dashView = UIView().then {
             $0.backgroundColor = .gray1000
@@ -355,6 +361,7 @@ private extension FilterBottomSheetView {
                 ? UIColor.gray800.cgColor
                 : UIColor.gray300.cgColor
         }
+        allChips.append(button)
         return button
     }
 }
@@ -368,5 +375,15 @@ extension FilterBottomSheetView {
 
     func addCloseButtonTarget(_ target: Any?, action: Selector) {
         header.addCloseTarget(target, action: action)
+    }
+
+    func reset() {
+        allChips.forEach {
+            $0.isSelected = false
+            $0.backgroundColor = .gray00
+            $0.layer.borderColor = UIColor.gray300.cgColor
+        }
+        minPriceTextField.text = nil
+        maxPriceTextField.text = nil
     }
 }

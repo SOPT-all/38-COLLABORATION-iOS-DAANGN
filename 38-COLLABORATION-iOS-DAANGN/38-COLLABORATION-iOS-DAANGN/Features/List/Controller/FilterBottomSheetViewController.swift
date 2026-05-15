@@ -121,7 +121,7 @@ private extension FilterBottomSheetViewController {
 
     @objc
     private func resetButtonDidTap() {
-        // TODO: 필터 초기화 로직 연결
+        filterView.reset()
     }
 
     @objc
