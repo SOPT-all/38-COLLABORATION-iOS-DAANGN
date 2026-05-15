@@ -62,11 +62,8 @@ final class FilterChip: UIView {
 
     private func makeChipButton(title: String) -> ChipButton {
         let button = ChipButton()
-        button.setTitle(title, for: .normal)
-        button.setTitle(title, for: .selected)
-        button.setTitleColor(.gray1000, for: .normal)
-        button.setTitleColor(.gray00, for: .selected)
-        button.titleLabel?.font = FontStyle.label2Regular.font
+        button.setTitle(title, style: .label2Regular, color: .gray1000, for: .normal)
+        button.setTitle(title, style: .label2Regular, color: .gray00, for: .selected)
         button.backgroundColor = .white
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.gray300.cgColor

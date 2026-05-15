@@ -12,7 +12,7 @@ import Then
 
 final class ListView: UIView {
     
-    private lazy var header = FullHeader()
+    lazy var header = FullHeader()
     let tableView = UITableView(frame: .zero, style: .plain)
     
     override init(frame: CGRect) {
