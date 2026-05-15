@@ -31,6 +31,8 @@ final class ListView: UIView {
 private extension ListView {
     private func setUI() {
         addSubviews(header, tableView)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
+        tableView.separatorColor = .gray200
     }
     
     private func setLayout() {
@@ -47,5 +49,6 @@ private extension ListView {
     
     private func register() {
         tableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
+        tableView.register(BannerCell.self, forCellReuseIdentifier: BannerCell.identifier)
     }
 }
