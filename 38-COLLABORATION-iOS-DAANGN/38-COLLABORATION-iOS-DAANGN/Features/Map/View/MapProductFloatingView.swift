@@ -68,20 +68,20 @@ final class MapProductFloatingView: UIView {
 
         titleLabel.attributedText = NSAttributedString.styled(
             product.title,
-            style: .body2Bold,
-            color: .gray900
+            style: .body1Regular,
+            color: .gray1000
         )
 
         addressTimeLabel.attributedText = NSAttributedString.styled(
             "\(product.address) · \(product.time)",
-            style: .label1Regular,
-            color: .gray500
+            style: .label3Regular,
+            color: .gray700
         )
 
         priceLabel.attributedText = NSAttributedString.styled(
             product.price,
             style: .body1Bold,
-            color: .gray900
+            color: .gray1000
         )
 
         heartImageView.image = UIImage(
@@ -186,14 +186,14 @@ private extension MapProductFloatingView {
             rightInset: 8
         )
 
-        label.backgroundColor = .gray100
-        label.layer.cornerRadius = 13
+        label.backgroundColor = .carrot100
+        label.layer.cornerRadius = 4
         label.clipsToBounds = true
 
         label.attributedText = NSAttributedString.styled(
             text,
-            style: .label1Regular,
-            color: .gray700
+            style: .label1Medium,
+            color: .carrot700
         )
 
         return label
