@@ -44,6 +44,9 @@ private extension ListViewController {
 
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 2 {
+            return 87
+        }
             return 138
         }
 }
@@ -52,10 +55,13 @@ extension ListViewController: UITableViewDataSource {
           return 10
       }
       
-      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-                guard let cell = tableView.dequeueReusableCell(
-                            withIdentifier: ListTableViewCell.identifier,
-                            for: indexPath) as? ListTableViewCell else { return UITableViewCell() }
-          return cell
-      }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.row == 2 {
+            let bannerCell = tableView.dequeueReusableCell(withIdentifier: BannerCell.identifier, for: indexPath) as! BannerCell
+            return bannerCell
+        }
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.identifier, for: indexPath) as! ListTableViewCell
+        return cell
+    }
 }
