@@ -14,7 +14,7 @@ final class BottomSheetHeader: UIView {
     
     private let titleLabel = UILabel()
     private let closeButton = UIButton()
-    private let seperator = UIView().then {
+    private let separator = UIView().then {
         $0.backgroundColor = .gray200
     }
     
@@ -29,9 +29,13 @@ final class BottomSheetHeader: UIView {
     }
     
     private func setUI() {
-        addSubviews(titleLabel, closeButton, seperator)
+        addSubviews(titleLabel, closeButton, separator)
         titleLabel.setText("카테고리", style: .h4Medium, color: .gray1000)
-        closeButton.setImage(.close?.withTintColor(.gray700), for: .normal)
+        closeButton.setImage(
+            .close?.withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
+        closeButton.tintColor = .gray700
     }
     
     private func setLayout() {
@@ -44,7 +48,7 @@ final class BottomSheetHeader: UIView {
             $0.trailing.equalToSuperview().inset(26)
             $0.verticalEdges.equalToSuperview().inset(14)
         }
-        seperator.snp.makeConstraints {
+        separator.snp.makeConstraints {
             $0.height.equalTo(1)
             $0.horizontalEdges.bottom.equalToSuperview()
         }
