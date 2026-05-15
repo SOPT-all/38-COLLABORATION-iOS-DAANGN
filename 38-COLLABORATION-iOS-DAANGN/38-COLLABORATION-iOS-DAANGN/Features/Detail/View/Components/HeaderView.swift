@@ -79,7 +79,7 @@ private extension HeaderView {
     func setStyle() {
         backgroundColor = .clear
         gradientLayer.colors = [
-            UIColor.gray1000.withAlphaComponent(0.35).cgColor,
+            UIColor.gray1000.withAlphaComponent(0.40).cgColor,
             UIColor.gray1000.withAlphaComponent(0).cgColor
         ]
         gradientLayer.locations = [0.0, 1.0]
