@@ -58,7 +58,7 @@ private extension FilterBottomSheetViewController {
         dimmedView.addGestureRecognizer(dimmedTap)
 
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handleBarDidPan))
-        filterView.addGestureRecognizer(panGesture)
+        filterView.addHandleBarGesture(panGesture)
     }
 
     func setUI() {
