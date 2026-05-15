@@ -28,6 +28,7 @@ private extension ListViewController {
     private func setDelegate() {
         listView.tableView.delegate = self
         listView.tableView.dataSource = self
+        listView.header.searchBar.delegate = self
     }
     
     private func setUI() {
@@ -67,5 +68,13 @@ extension ListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         return cell
+    }
+}
+
+extension ListViewController: SearchBarHeaderDelegate {
+    func filterButtonDidTap() {
+        let bottomSheet = FilterBottomSheetViewController()
+        bottomSheet.modalPresentationStyle = .overFullScreen
+        present(bottomSheet, animated: false)
     }
 }

@@ -10,7 +10,13 @@ import UIKit
 import Then
 import SnapKit
 
+protocol SearchBarHeaderDelegate: AnyObject {
+    func filterButtonDidTap()
+}
+
 final class SearchBarHeader: UIView {
+    
+    weak var delegate: SearchBarHeaderDelegate?
     
     private lazy var backButton = UIButton().then {
         $0.setImage(.chevronLeft, for: .normal)
@@ -35,6 +41,7 @@ final class SearchBarHeader: UIView {
         super.init(frame: frame)
         setUI()
         setLayout()
+        setAddTarget()
     }
     
     required init?(coder: NSCoder) {
@@ -46,7 +53,11 @@ final class SearchBarHeader: UIView {
 
         searchInput.addRightButton(closeButton)
         searchInput.setText("조명", style: .body1Regular)
+    }
+    
+    private func setAddTarget() {
         closeButton.addTarget(self, action: #selector(clearText), for: .touchUpInside)
+        filterButton.addTarget(self, action: #selector(filterButtonDidTap), for: .touchUpInside)
     }
     
     private func setLayout() {
@@ -73,5 +84,10 @@ final class SearchBarHeader: UIView {
         searchInput.text = ""
         searchInput.resignFirstResponder()
         resignFirstResponder()
+    }
+    
+    @objc
+    private func filterButtonDidTap() {
+        delegate?.filterButtonDidTap()
     }
 }
