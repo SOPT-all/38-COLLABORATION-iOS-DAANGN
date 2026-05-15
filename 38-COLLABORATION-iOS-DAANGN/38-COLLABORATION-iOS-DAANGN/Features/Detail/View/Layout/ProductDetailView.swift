@@ -23,6 +23,7 @@ final class ProductDetailView: UIView {
     
     var onImageIndexChanged: ((Int) -> Void)?
     private let headerView = HeaderView()
+    private let headerHeight: CGFloat = 105
     
     lazy var collectionView = UICollectionView(
         frame: .zero,
@@ -88,7 +89,7 @@ private extension ProductDetailView {
         
         headerView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(105)
+            $0.height.equalTo(headerHeight)
         }
     }
     
@@ -193,5 +194,15 @@ private extension ProductDetailView {
         section.orthogonalScrollingBehavior = .continuous
         section.boundarySupplementaryItems = [header]
         return section
+    }
+}
+
+extension ProductDetailView {
+    var currentHeaderHeight: CGFloat {
+        return headerHeight
+    }
+    
+    func updateHeaderStyle(isScrolled: Bool) {
+        headerView.updateStyle(isScrolled: isScrolled)
     }
 }

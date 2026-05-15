@@ -12,6 +12,7 @@ import SnapKit
 final class ProductDetailViewController: UIViewController {
     
     private var currentImageIndex = 0
+    private var isHeaderScrolledStyleApplied = false
     private weak var imageIndicatorView: ImageIndicatorView?
     private let productDetailData = ProductDetailData.dummy
     private let productDetailView = ProductDetailView()
@@ -27,6 +28,10 @@ final class ProductDetailViewController: UIViewController {
         setUI()
         setLayout()
     }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return isHeaderScrolledStyleApplied ? .darkContent : .lightContent
+    }
 }
 
 private extension ProductDetailViewController {
@@ -35,6 +40,7 @@ private extension ProductDetailViewController {
         view.backgroundColor = .gray00
         toastView.isHidden = true
         productDetailView.collectionView.dataSource = self
+        productDetailView.collectionView.delegate = self
         productDetailView.onImageIndexChanged = { [weak self] index in
             self?.updateCurrentImageIndex(index)
         }
@@ -131,7 +137,7 @@ private extension ProductDetailViewController {
     }
 }
 
-extension ProductDetailViewController: UICollectionViewDataSource {
+extension ProductDetailViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return ProductDetailSection.allCases.count
@@ -300,5 +306,20 @@ extension ProductDetailViewController: UICollectionViewDataSource {
         default:
             return UICollectionReusableView()
         }
+    }
+}
+
+extension ProductDetailViewController {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let imageCarouselBottom = productDetailView.collectionView.bounds.width
+        let headerTouchThreshold = imageCarouselBottom - productDetailView.currentHeaderHeight
+        let shouldApplyScrolledStyle = scrollView.contentOffset.y >= headerTouchThreshold
+        
+        guard isHeaderScrolledStyleApplied != shouldApplyScrolledStyle else { return }
+        isHeaderScrolledStyleApplied = shouldApplyScrolledStyle
+        
+        productDetailView.updateHeaderStyle(isScrolled: shouldApplyScrolledStyle)
+        setNeedsStatusBarAppearanceUpdate()
+        navigationController?.setNeedsStatusBarAppearanceUpdate()
     }
 }
