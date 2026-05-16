@@ -12,22 +12,28 @@ import SnapKit
 
 final class HeaderView: UIView {
     
+    private var isScrolledStyleApplied = false
+    private let gradientLayer = CAGradientLayer()
     private let buttonContainerView = UIView()
     
     private let chevronButton = UIButton().then {
-        $0.setImage(UIImage(named: "icon_chevron_left"), for: .normal)
+        $0.setImage(UIImage(named: "icon_chevron_left")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        $0.tintColor = .gray00
     }
     
     private let homeButton = UIButton().then {
-        $0.setImage(UIImage(named: "icon_house_line"), for: .normal)
+        $0.setImage(UIImage(named: "icon_house_line")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        $0.tintColor = .gray00
     }
     
     private let shareButton = UIButton().then {
-        $0.setImage(UIImage(named: "icon_download"), for: .normal)
+        $0.setImage(UIImage(named: "icon_download")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        $0.tintColor = .gray00
     }
     
     private let dot3Button = UIButton().then {
-        $0.setImage(UIImage(named: "icon_dot3_vertical_fill"), for: .normal)
+        $0.setImage(UIImage(named: "icon_dot3_vertical_fill")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        $0.tintColor = .gray00
     }
     
     override init(frame: CGRect) {
@@ -41,15 +47,48 @@ final class HeaderView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        gradientLayer.frame = bounds
+    }
+}
+
+extension HeaderView {
+    func updateStyle(isScrolled: Bool) {
+        guard isScrolledStyleApplied != isScrolled else { return }
+        isScrolledStyleApplied = isScrolled
+        
+        let iconColor: UIColor = isScrolled ? .gray1000 : .gray00
+        let headerColor: UIColor = isScrolled ? .gray00 : .clear
+        
+        UIView.animate(withDuration: 0.2) {
+            self.backgroundColor = headerColor
+            self.gradientLayer.opacity = isScrolled ? 0 : 1
+            self.chevronButton.tintColor = iconColor
+            self.homeButton.tintColor = iconColor
+            self.shareButton.tintColor = iconColor
+            self.dot3Button.tintColor = iconColor
+        }
+    }
 }
 
 private extension HeaderView {
     
     func setStyle() {
         backgroundColor = .clear
+        gradientLayer.colors = [
+            UIColor.gray1000.withAlphaComponent(0.40).cgColor,
+            UIColor.gray1000.withAlphaComponent(0).cgColor
+        ]
+        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
     }
     
     func setUI() {
+        layer.insertSublayer(gradientLayer, at: 0)
         addSubview(buttonContainerView)
         buttonContainerView.addSubviews(chevronButton, homeButton, shareButton, dot3Button)
     }

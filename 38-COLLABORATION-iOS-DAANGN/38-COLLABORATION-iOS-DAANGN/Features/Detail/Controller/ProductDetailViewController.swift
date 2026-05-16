@@ -12,11 +12,14 @@ import SnapKit
 final class ProductDetailViewController: UIViewController {
     
     private var currentImageIndex = 0
+    private var isHeaderScrolledStyleApplied = false
     private weak var imageIndicatorView: ImageIndicatorView?
     private let productDetailData = ProductDetailData.dummy
     private let productDetailView = ProductDetailView()
     private let recommendProduct = RecommendProduct.dummyList
+    private let toastView = ToastView()
     private let bottomBarView = BottomBarView()
+    private var toastDismissWorkItem: DispatchWorkItem?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,20 +28,26 @@ final class ProductDetailViewController: UIViewController {
         setUI()
         setLayout()
     }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return isHeaderScrolledStyleApplied ? .darkContent : .lightContent
+    }
 }
 
 private extension ProductDetailViewController {
     
     func setStyle() {
         view.backgroundColor = .gray00
+        toastView.isHidden = true
         productDetailView.collectionView.dataSource = self
+        productDetailView.collectionView.delegate = self
         productDetailView.onImageIndexChanged = { [weak self] index in
             self?.updateCurrentImageIndex(index)
         }
     }
     
     func setUI() {
-        view.addSubviews(productDetailView, bottomBarView)
+        view.addSubviews(productDetailView, toastView, bottomBarView)
         bottomBarView.chatButton.addTarget(
             self,
             action: #selector(chatButtonDidTap),
@@ -53,9 +62,15 @@ private extension ProductDetailViewController {
         }
         
         bottomBarView.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
-            $0.height.equalTo(68)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-68)
+            $0.bottom.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
+        }
+        
+        toastView.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview().inset(16)
+            $0.bottom.equalTo(bottomBarView.snp.top).offset(-16)
+            $0.height.equalTo(49)
         }
     }
     
@@ -67,7 +82,49 @@ private extension ProductDetailViewController {
     private func presentBottomSheetVC(){
         let bottomSheetViewController = BottomSheetViewController()
         bottomSheetViewController.modalPresentationStyle = .overFullScreen
+        bottomSheetViewController.onSendButtonTapped = { [weak self] in
+            self?.showToast()
+        }
         self.present(bottomSheetViewController, animated: false)
+    }
+    
+    private func showToast() {
+        toastDismissWorkItem?.cancel()
+        view.layoutIfNeeded()
+        
+        toastView.isHidden = false
+        toastView.transform = CGAffineTransform(
+            translationX: 0,
+            y: bottomBarView.frame.height + 56
+        )
+        
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0.2,
+            options: [.curveEaseOut]
+        ) {
+            self.toastView.transform = .identity
+        }
+        
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            
+            UIView.animate(
+                withDuration: 0.5,
+                delay: 0,
+                options: [.curveEaseIn]
+            ) {
+                self.toastView.transform = CGAffineTransform(
+                    translationX: 0,
+                    y: self.bottomBarView.frame.height + 56
+                )
+            } completion: { _ in
+                self.toastView.isHidden = true
+            }
+        }
+        
+        toastDismissWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, execute: workItem)
     }
     
     func updateCurrentImageIndex(_ index: Int) {
@@ -80,7 +137,7 @@ private extension ProductDetailViewController {
     }
 }
 
-extension ProductDetailViewController: UICollectionViewDataSource {
+extension ProductDetailViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return ProductDetailSection.allCases.count
@@ -249,5 +306,20 @@ extension ProductDetailViewController: UICollectionViewDataSource {
         default:
             return UICollectionReusableView()
         }
+    }
+}
+
+extension ProductDetailViewController {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let imageCarouselBottom = productDetailView.collectionView.bounds.width
+        let headerTouchThreshold = imageCarouselBottom - productDetailView.currentHeaderHeight
+        let shouldApplyScrolledStyle = scrollView.contentOffset.y >= headerTouchThreshold
+        
+        guard isHeaderScrolledStyleApplied != shouldApplyScrolledStyle else { return }
+        isHeaderScrolledStyleApplied = shouldApplyScrolledStyle
+        
+        productDetailView.updateHeaderStyle(isScrolled: shouldApplyScrolledStyle)
+        setNeedsStatusBarAppearanceUpdate()
+        navigationController?.setNeedsStatusBarAppearanceUpdate()
     }
 }
