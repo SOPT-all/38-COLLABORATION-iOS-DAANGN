@@ -57,6 +57,10 @@ private extension ListViewController {
 
     @objc
     private func mapButtonDidTap() {
+        navigateToMap()
+    }
+
+    func navigateToMap() {
         let mapViewController = MapViewController()
 
         let transition = CATransition()
@@ -75,8 +79,14 @@ extension ListViewController: UITableViewDelegate {
         if indexPath.row == 2 {
             return 87
         }
-            return 138
-        }
+        return 138
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        guard indexPath.row == 2 else { return }
+        navigateToMap()
+    }
 }
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
