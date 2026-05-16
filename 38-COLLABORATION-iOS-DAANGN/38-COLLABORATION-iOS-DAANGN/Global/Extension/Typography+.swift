@@ -95,4 +95,14 @@ extension UIButton {
             for: state
         )
     }
+
+    func setConfigTitle(
+        _ title: String,
+        style: FontStyle,
+        color: UIColor = .gray1000
+    ) {
+        guard var config = self.configuration else { return }
+        config.attributedTitle = AttributedString(.styled(title, style: style, color: color))
+        self.configuration = config
+    }
 }
