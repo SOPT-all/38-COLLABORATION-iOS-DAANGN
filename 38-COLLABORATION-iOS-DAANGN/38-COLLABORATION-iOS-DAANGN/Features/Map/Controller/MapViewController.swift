@@ -132,6 +132,7 @@ final class MapViewController: UIViewController {
         setupStyle()
         setupHierarchy()
         setupLayout()
+        setupDelegate()
         setupAction()
     }
     
@@ -264,6 +265,10 @@ final class MapViewController: UIViewController {
         }
     }
     
+    private func setupDelegate() {
+        headerView.searchBar.delegate = self
+    }
+
     private func setupAction() {
         let mapTapGesture = UITapGestureRecognizer(
             target: self,
@@ -409,5 +414,24 @@ final class MapViewController: UIViewController {
     @objc
     private func mapDidTap() {
         hideFloatingView()
+    }
+}
+
+extension MapViewController: SearchBarHeaderDelegate {
+    func filterButtonDidTap() {
+        let bottomSheet = FilterBottomSheetViewController()
+        bottomSheet.modalPresentationStyle = .overFullScreen
+        present(bottomSheet, animated: false)
+    }
+
+    func backButtonDidTap() {
+        let transition = CATransition()
+        transition.duration = 0.3
+        transition.type = .push
+        transition.subtype = .fromLeft
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+
+        navigationController?.view.layer.add(transition, forKey: kCATransition)
+        navigationController?.popViewController(animated: false)
     }
 }

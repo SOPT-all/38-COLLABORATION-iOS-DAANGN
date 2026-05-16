@@ -12,7 +12,7 @@ import SnapKit
 
 class SimpleHeader: UIView {
     
-    private let searchBar = SearchBarHeader()
+    let searchBar = SearchBarHeader()
     private let filterChip = FilterChip()
     
     override init(frame: CGRect) {
