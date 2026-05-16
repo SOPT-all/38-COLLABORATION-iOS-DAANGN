@@ -84,8 +84,11 @@ extension ListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        guard indexPath.row == 2 else { return }
-        navigateToMap()
+        if indexPath.row == 2 {
+            navigateToMap()
+        } else {
+            navigationController?.pushViewController(ProductDetailViewController(), animated: true)
+        }
     }
 }
 extension ListViewController: UITableViewDataSource {
