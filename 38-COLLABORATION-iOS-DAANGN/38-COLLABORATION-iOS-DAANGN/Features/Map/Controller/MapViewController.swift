@@ -27,7 +27,7 @@ final class MapViewController: UIViewController {
         $0.isUserInteractionEnabled = true
     }
 
-    private let listButton = ViewToggleButton(imageName: "list", title: "목록 보기")
+    private let listButton = ViewToggleButton(imageName: "listIcon", title: "목록 보기")
     
     private let currentLocationButton = UIButton(type: .system).then {
         $0.setImage(
