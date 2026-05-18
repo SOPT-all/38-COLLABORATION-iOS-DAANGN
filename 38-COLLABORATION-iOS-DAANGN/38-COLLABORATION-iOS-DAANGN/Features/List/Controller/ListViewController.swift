@@ -11,35 +11,66 @@ import Then
 import SnapKit
 
 class ListViewController: UIViewController {
-    
+
     private let listView = ListView()
-    
+
+    private let mapButton = ViewToggleButton(imageName: "map", title: "지도 보기")
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
         setDelegate()
         setUI()
         setLayout()
+        setAction()
     }
 }
 
 private extension ListViewController {
-    
+
     private func setDelegate() {
         listView.tableView.delegate = self
         listView.tableView.dataSource = self
         listView.header.searchBar.delegate = self
     }
-    
+
     private func setUI() {
-        view.addSubviews(listView)
+        view.addSubviews(listView, mapButton)
     }
-    
+
     private func setLayout() {
         listView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.horizontalEdges.bottom.equalToSuperview()
         }
+
+        mapButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            $0.height.equalTo(34)
+        }
+    }
+
+    private func setAction() {
+        mapButton.addTarget(self, action: #selector(mapButtonDidTap), for: .touchUpInside)
+    }
+
+    @objc
+    private func mapButtonDidTap() {
+        navigateToMap()
+    }
+
+    func navigateToMap() {
+        let mapViewController = MapViewController()
+
+        let transition = CATransition()
+        transition.duration = 0.3
+        transition.type = .push
+        transition.subtype = .fromRight
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+
+        navigationController?.view.layer.add(transition, forKey: kCATransition)
+        navigationController?.pushViewController(mapViewController, animated: false)
     }
 }
 
@@ -48,8 +79,17 @@ extension ListViewController: UITableViewDelegate {
         if indexPath.row == 2 {
             return 87
         }
-            return 138
+        return 138
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        if indexPath.row == 2 {
+            navigateToMap()
+        } else {
+            navigationController?.pushViewController(ProductDetailViewController(), animated: true)
         }
+    }
 }
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

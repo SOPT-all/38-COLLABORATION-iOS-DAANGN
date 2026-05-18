@@ -27,37 +27,7 @@ final class MapViewController: UIViewController {
         $0.isUserInteractionEnabled = true
     }
 
-    private let listButton = UIButton(type: .system).then {
-        var config = UIButton.Configuration.plain()
-
-        config.image = UIImage(named: "listIcon")?
-            .withRenderingMode(.alwaysTemplate)
-
-        config.imagePlacement = .leading
-        config.imagePadding = 4
-
-        config.contentInsets = NSDirectionalEdgeInsets(
-            top: 8,
-            leading: 8,
-            bottom: 8,
-            trailing: 8
-        )
-
-        config.attributedTitle = AttributedString(
-            NSAttributedString.styled(
-                "목록 보기",
-                style: .label3Regular,
-                color: .gray00
-            )
-        )
-
-        $0.configuration = config
-
-        $0.tintColor = .gray00
-        $0.backgroundColor = .gray1000
-        $0.layer.cornerRadius = 17
-        $0.clipsToBounds = true
-    }
+    private let listButton = ViewToggleButton(imageName: "list", title: "목록 보기")
     
     private let currentLocationButton = UIButton(type: .system).then {
         $0.setImage(
@@ -162,6 +132,7 @@ final class MapViewController: UIViewController {
         setupStyle()
         setupHierarchy()
         setupLayout()
+        setupDelegate()
         setupAction()
     }
     
@@ -294,6 +265,10 @@ final class MapViewController: UIViewController {
         }
     }
     
+    private func setupDelegate() {
+        headerView.searchBar.delegate = self
+    }
+
     private func setupAction() {
         let mapTapGesture = UITapGestureRecognizer(
             target: self,
@@ -439,5 +414,24 @@ final class MapViewController: UIViewController {
     @objc
     private func mapDidTap() {
         hideFloatingView()
+    }
+}
+
+extension MapViewController: SearchBarHeaderDelegate {
+    func filterButtonDidTap() {
+        let bottomSheet = FilterBottomSheetViewController()
+        bottomSheet.modalPresentationStyle = .overFullScreen
+        present(bottomSheet, animated: false)
+    }
+
+    func backButtonDidTap() {
+        let transition = CATransition()
+        transition.duration = 0.3
+        transition.type = .push
+        transition.subtype = .fromLeft
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+
+        navigationController?.view.layer.add(transition, forKey: kCATransition)
+        navigationController?.popViewController(animated: false)
     }
 }

@@ -12,6 +12,11 @@ import SnapKit
 
 protocol SearchBarHeaderDelegate: AnyObject {
     func filterButtonDidTap()
+    func backButtonDidTap()
+}
+
+extension SearchBarHeaderDelegate {
+    func backButtonDidTap() {}
 }
 
 final class SearchBarHeader: UIView {
@@ -56,6 +61,7 @@ final class SearchBarHeader: UIView {
     }
     
     private func setAddTarget() {
+        backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
         closeButton.addTarget(self, action: #selector(clearText), for: .touchUpInside)
         filterButton.addTarget(self, action: #selector(filterButtonDidTap), for: .touchUpInside)
     }
@@ -86,6 +92,11 @@ final class SearchBarHeader: UIView {
         resignFirstResponder()
     }
     
+    @objc
+    private func backButtonDidTap() {
+        delegate?.backButtonDidTap()
+    }
+
     @objc
     private func filterButtonDidTap() {
         delegate?.filterButtonDidTap()

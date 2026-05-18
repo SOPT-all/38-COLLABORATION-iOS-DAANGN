@@ -33,6 +33,7 @@ private extension ListView {
         addSubviews(header, tableView)
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
         tableView.separatorColor = .gray200
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 40, right: 0)
     }
     
     private func setLayout() {

@@ -66,6 +66,8 @@ private extension ListTableViewCell {
             $0.tintColor = .gray500
         }
         likeCount.setText("3", style: .label2Medium, color: .gray700)
+
+        tags.configure(tags: ["새상품", "문고리거래", "직거래", "택배거래", "나눔"])
     }
     
     private func setLayout() {
