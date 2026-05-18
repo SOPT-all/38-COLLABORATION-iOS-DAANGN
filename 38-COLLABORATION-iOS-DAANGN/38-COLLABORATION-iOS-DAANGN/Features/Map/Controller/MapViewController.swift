@@ -27,7 +27,7 @@ final class MapViewController: UIViewController {
         $0.isUserInteractionEnabled = true
     }
 
-    private let listButton = ViewToggleButton(imageName: "list", title: "목록 보기")
+    private let listButton = ViewToggleButton(imageName: "listIcon", title: "목록 보기")
     
     private let currentLocationButton = UIButton(type: .system).then {
         $0.setImage(
@@ -220,22 +220,22 @@ final class MapViewController: UIViewController {
         }
 
         secondProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(62)
+            $0.top.equalTo(headerView.snp.bottom).offset(51)
             $0.trailing.equalToSuperview().inset(15)
         }
 
         thirdProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(202)
+            $0.top.equalTo(headerView.snp.bottom).offset(204)
             $0.trailing.equalToSuperview().inset(80)
         }
 
         fourthProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(252)
+            $0.top.equalTo(headerView.snp.bottom).offset(268)
             $0.leading.equalToSuperview().offset(50)
         }
 
         fifthProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(322)
+            $0.top.equalTo(headerView.snp.bottom).offset(330)
             $0.centerX.equalToSuperview()
         }
 
@@ -246,22 +246,22 @@ final class MapViewController: UIViewController {
         }
 
         selectedSecondProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(62)
+            $0.top.equalTo(headerView.snp.bottom).offset(51)
             $0.trailing.equalToSuperview().inset(15)
         }
 
         selectedThirdProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(202)
+            $0.top.equalTo(headerView.snp.bottom).offset(204)
             $0.trailing.equalToSuperview().inset(80)
         }
 
         selectedFourthProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(252)
+            $0.top.equalTo(headerView.snp.bottom).offset(268)
             $0.leading.equalToSuperview().offset(50)
         }
 
         selectedFifthProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(322)
+            $0.top.equalTo(headerView.snp.bottom).offset(338)
             $0.centerX.equalToSuperview()
         }
     }
