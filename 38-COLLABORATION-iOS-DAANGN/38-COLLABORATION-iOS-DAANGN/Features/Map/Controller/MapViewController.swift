@@ -235,7 +235,7 @@ final class MapViewController: UIViewController {
         }
 
         fifthProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(322)
+            $0.top.equalTo(headerView.snp.bottom).offset(330)
             $0.centerX.equalToSuperview()
         }
 
@@ -246,22 +246,22 @@ final class MapViewController: UIViewController {
         }
 
         selectedSecondProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(62)
+            $0.top.equalTo(headerView.snp.bottom).offset(51)
             $0.trailing.equalToSuperview().inset(15)
         }
 
         selectedThirdProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(202)
+            $0.top.equalTo(headerView.snp.bottom).offset(204)
             $0.trailing.equalToSuperview().inset(80)
         }
 
         selectedFourthProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(252)
+            $0.top.equalTo(headerView.snp.bottom).offset(268)
             $0.leading.equalToSuperview().offset(50)
         }
 
         selectedFifthProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(322)
+            $0.top.equalTo(headerView.snp.bottom).offset(338)
             $0.centerX.equalToSuperview()
         }
     }
