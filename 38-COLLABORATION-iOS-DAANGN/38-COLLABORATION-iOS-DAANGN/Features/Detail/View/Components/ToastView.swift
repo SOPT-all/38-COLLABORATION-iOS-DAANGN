@@ -22,7 +22,7 @@ final class ToastView: UIView {
     }
     
     private let rightChevron = UIImageView().then {
-        $0.image = UIImage(named: "icon_chevron_right")?.withRenderingMode(.alwaysTemplate)
+        $0.image = .chevronRight?.withRenderingMode(.alwaysTemplate)
         $0.tintColor = .carrot600
         $0.contentMode = .scaleAspectFit
         $0.setContentCompressionResistancePriority(.required, for: .horizontal)

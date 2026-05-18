@@ -22,7 +22,7 @@ final class TradeLocationCell: UICollectionViewCell {
     }
     
     private let chevron = UIImageView().then {
-        $0.image = UIImage(named: "icon_chevron_right")
+        $0.image = .chevronRight
     }
     
     private let map = UIImageView().then {
