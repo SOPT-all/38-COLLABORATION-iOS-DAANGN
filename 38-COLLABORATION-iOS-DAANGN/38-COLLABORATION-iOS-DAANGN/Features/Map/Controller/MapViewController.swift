@@ -31,7 +31,7 @@ final class MapViewController: UIViewController {
     
     private let currentLocationButton = UIButton(type: .system).then {
         $0.setImage(
-            UIImage(named: "locationIcon")?
+                .crossHair?
                 .withRenderingMode(.alwaysTemplate),
             for: .normal
         )
