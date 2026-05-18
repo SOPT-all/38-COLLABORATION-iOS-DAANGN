@@ -213,29 +213,29 @@ final class MapViewController: UIViewController {
         }
         
         // MARK: 매물 칩 UI 화면에 올리기
-        // headerView.snp.bottom 기준으로 통일 (safeArea 높이가 기기마다 달라서 생기는 위치 오차 방지)
+        // MARK: 매물칩의 위치는 지도 이미지뷰 시작 부분 기준으로 잡음
         firstProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(97)
+            $0.top.equalTo(mapImageView.snp.top).offset(254)
             $0.leading.equalToSuperview().offset(37)
         }
 
         secondProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(62)
+            $0.top.equalTo(mapImageView.snp.top).offset(51)
             $0.trailing.equalToSuperview().inset(15)
         }
 
         thirdProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(202)
+            $0.top.equalTo(mapImageView.snp.top).offset(204)
             $0.trailing.equalToSuperview().inset(80)
         }
 
         fourthProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(252)
+            $0.top.equalTo(mapImageView.snp.top).offset(268)
             $0.leading.equalToSuperview().offset(50)
         }
 
         fifthProductChipView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(322)
+            $0.top.equalTo(mapImageView.snp.top).offset(322)
             $0.centerX.equalToSuperview()
         }
 
