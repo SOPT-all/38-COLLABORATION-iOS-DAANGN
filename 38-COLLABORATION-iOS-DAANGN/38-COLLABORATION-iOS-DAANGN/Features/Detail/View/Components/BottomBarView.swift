@@ -16,8 +16,8 @@ final class BottomBarView: UIView {
     }
     
     private let heartButton = UIButton().then {
-        $0.setImage(UIImage(named: "icon_heart_line"), for: .normal)
-        $0.setImage(UIImage(named: "icon_heart_Fill"), for: .selected)
+        $0.setImage(.heartLine, for: .normal)
+        $0.setImage(.heartFill, for: .selected)
     }
     
     let chatButton = UIButton().then {

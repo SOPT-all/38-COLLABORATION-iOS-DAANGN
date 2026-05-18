@@ -31,7 +31,7 @@ final class MapViewController: UIViewController {
     
     private let currentLocationButton = UIButton(type: .system).then {
         $0.setImage(
-            UIImage(named: "locationIcon")?
+                .crossHair?
                 .withRenderingMode(.alwaysTemplate),
             for: .normal
         )
@@ -213,54 +213,55 @@ final class MapViewController: UIViewController {
         }
         
         // MARK: 매물 칩 UI 화면에 올리기
+        // headerView.snp.bottom 기준으로 통일 (safeArea 높이가 기기마다 달라서 생기는 위치 오차 방지)
         firstProductChipView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(145)
+            $0.top.equalTo(headerView.snp.bottom).offset(97)
             $0.leading.equalToSuperview().offset(37)
         }
 
         secondProductChipView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(110)
+            $0.top.equalTo(headerView.snp.bottom).offset(62)
             $0.trailing.equalToSuperview().inset(15)
         }
 
         thirdProductChipView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(250)
+            $0.top.equalTo(headerView.snp.bottom).offset(202)
             $0.trailing.equalToSuperview().inset(80)
         }
 
         fourthProductChipView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(300)
+            $0.top.equalTo(headerView.snp.bottom).offset(252)
             $0.leading.equalToSuperview().offset(50)
         }
 
         fifthProductChipView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(370)
+            $0.top.equalTo(headerView.snp.bottom).offset(322)
             $0.centerX.equalToSuperview()
         }
-        
+
         // MARK: 선택된 매물 칩 UI 화면에 올리기
         selectedFirstProductChipView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(145)
+            $0.top.equalTo(headerView.snp.bottom).offset(97)
             $0.leading.equalToSuperview().offset(37)
         }
 
         selectedSecondProductChipView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(110)
+            $0.top.equalTo(headerView.snp.bottom).offset(62)
             $0.trailing.equalToSuperview().inset(15)
         }
 
         selectedThirdProductChipView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(250)
+            $0.top.equalTo(headerView.snp.bottom).offset(202)
             $0.trailing.equalToSuperview().inset(80)
         }
 
         selectedFourthProductChipView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(300)
+            $0.top.equalTo(headerView.snp.bottom).offset(252)
             $0.leading.equalToSuperview().offset(50)
         }
 
         selectedFifthProductChipView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(370)
+            $0.top.equalTo(headerView.snp.bottom).offset(322)
             $0.centerX.equalToSuperview()
         }
     }

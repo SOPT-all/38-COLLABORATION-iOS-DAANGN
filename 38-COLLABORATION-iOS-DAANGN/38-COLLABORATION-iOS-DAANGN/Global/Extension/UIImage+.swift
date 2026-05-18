@@ -26,4 +26,5 @@ extension UIImage {
     static let xmarkCircleFill = UIImage(named: "xmark_circle_fill")
     static let rectangle = UIImage(named: "rectangle")
     static let rectangleFill = UIImage(named: "rectangle_fill")
+    static let information = UIImage(named: "information")
 }

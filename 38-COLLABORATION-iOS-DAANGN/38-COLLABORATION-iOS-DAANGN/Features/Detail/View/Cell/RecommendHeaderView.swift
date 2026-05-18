@@ -18,7 +18,7 @@ final class RecommendHeaderView: UICollectionReusableView {
         $0.setText("메주님을 위한 새 상품 · 광고", style: .h5Medium)
     }
     private let information = UIImageView().then {
-        $0.image = UIImage(named: "icon_information")
+        $0.image = .information
     }
 
     override init(frame: CGRect) {

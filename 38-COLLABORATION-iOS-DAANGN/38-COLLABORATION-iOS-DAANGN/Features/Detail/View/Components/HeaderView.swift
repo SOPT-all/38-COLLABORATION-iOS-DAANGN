@@ -17,22 +17,22 @@ final class HeaderView: UIView {
     private let buttonContainerView = UIView()
     
     private let chevronButton = UIButton().then {
-        $0.setImage(UIImage(named: "icon_chevron_left")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        $0.setImage(.chevronLeft?.withRenderingMode(.alwaysTemplate), for: .normal)
         $0.tintColor = .gray00
     }
     
     private let homeButton = UIButton().then {
-        $0.setImage(UIImage(named: "icon_house_line")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        $0.setImage(.houseLine?.withRenderingMode(.alwaysTemplate), for: .normal)
         $0.tintColor = .gray00
     }
     
     private let shareButton = UIButton().then {
-        $0.setImage(UIImage(named: "icon_download")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        $0.setImage(.download?.withRenderingMode(.alwaysTemplate), for: .normal)
         $0.tintColor = .gray00
     }
     
     private let dot3Button = UIButton().then {
-        $0.setImage(UIImage(named: "icon_dot3_vertical_fill")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        $0.setImage(.dot3VerticalFill?.withRenderingMode(.alwaysTemplate), for: .normal)
         $0.tintColor = .gray00
     }
     
