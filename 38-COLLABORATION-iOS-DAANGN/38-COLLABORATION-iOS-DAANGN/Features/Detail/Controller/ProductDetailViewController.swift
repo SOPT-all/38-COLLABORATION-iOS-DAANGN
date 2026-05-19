@@ -14,12 +14,22 @@ final class ProductDetailViewController: UIViewController {
     private var currentImageIndex = 0
     private var isHeaderScrolledStyleApplied = false
     private weak var imageIndicatorView: ImageIndicatorView?
-    private let productDetailData = ProductDetailData.dummy
+    private let productId: Int
+    private var productDetailData: ProductDetailResponseDTO?
     private let productDetailView = ProductDetailView()
-    private let recommendProduct = RecommendProduct.dummyList
+    private var adProductList: [AdProductListResponseDTO] = []
     private let toastView = ToastView()
     private let bottomBarView = BottomBarView()
     private var toastDismissWorkItem: DispatchWorkItem?
+    
+    init(productId: Int = 9) {
+        self.productId = productId
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +37,8 @@ final class ProductDetailViewController: UIViewController {
         setStyle()
         setUI()
         setLayout()
+        fetchProductDetail(productId: productId)
+        fetchAdProductList()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -132,7 +144,7 @@ private extension ProductDetailViewController {
         currentImageIndex = index
         imageIndicatorView?.dataBind(
             currentIndex: currentImageIndex,
-            totalCount: productDetailData.imageURLs.count
+            totalCount: productDetailData?.imageUrls.count ?? 0
         )
     }
 }
@@ -153,17 +165,17 @@ extension ProductDetailViewController: UICollectionViewDataSource, UICollectionV
         
         switch section {
         case .imageCarousel:
-            return productDetailData.imageURLs.count
+            return productDetailData?.imageUrls.count ?? 0
         case .sellerProfile:
-            return 1
+            return productDetailData == nil ? 0 : 1
         case .productInformation:
-            return 1
+            return productDetailData == nil ? 0 : 1
         case .descript:
-            return 1
+            return productDetailData == nil ? 0 : 1
         case .tradeLocation:
-            return 1
+            return productDetailData == nil ? 0 : 1
         case .recommendItem:
-            return recommendProduct.count
+            return adProductList.count
         }
     }
     
@@ -177,6 +189,10 @@ extension ProductDetailViewController: UICollectionViewDataSource, UICollectionV
         
         switch section {
         case .imageCarousel:
+            guard let productDetailData else {
+                return UICollectionViewCell()
+            }
+            
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ImageCarouselCell.identifier,
                 for: indexPath
@@ -185,11 +201,15 @@ extension ProductDetailViewController: UICollectionViewDataSource, UICollectionV
             }
             
             cell.dataBind(
-                imageName: productDetailData.imageURLs[indexPath.item]
+                imageURL: productDetailData.imageUrls[indexPath.item]
             )
             return cell
             
         case .sellerProfile:
+            guard let productDetailData else {
+                return UICollectionViewCell()
+            }
+            
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: SellerProfileCell.identifier,
                 for: indexPath
@@ -207,6 +227,10 @@ extension ProductDetailViewController: UICollectionViewDataSource, UICollectionV
             return cell
             
         case .productInformation:
+            guard let productDetailData else {
+                return UICollectionViewCell()
+            }
+            
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ProductInfoCell.identifier,
                 for: indexPath
@@ -224,6 +248,10 @@ extension ProductDetailViewController: UICollectionViewDataSource, UICollectionV
             return cell
             
         case .descript:
+            guard let productDetailData else {
+                return UICollectionViewCell()
+            }
+            
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: DescriptionCell.identifier,
                 for: indexPath
@@ -237,6 +265,10 @@ extension ProductDetailViewController: UICollectionViewDataSource, UICollectionV
             return cell
             
         case .tradeLocation:
+            guard let productDetailData else {
+                return UICollectionViewCell()
+            }
+            
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: TradeLocationCell.identifier,
                 for: indexPath
@@ -249,6 +281,7 @@ extension ProductDetailViewController: UICollectionViewDataSource, UICollectionV
                 count: productDetailData.viewCount
             )
             return cell
+            
         case .recommendItem:
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: RecommendItemCell.identifier,
@@ -257,7 +290,7 @@ extension ProductDetailViewController: UICollectionViewDataSource, UICollectionV
                 return UICollectionViewCell()
             }
             
-            let product = recommendProduct[indexPath.item]
+            let product = adProductList[indexPath.item]
             
             cell.dataBind(
                 imgURL: product.thumbnailUrl,
@@ -269,7 +302,6 @@ extension ProductDetailViewController: UICollectionViewDataSource, UICollectionV
         }
     }
 
-    
     func collectionView(
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind kind: String,
@@ -287,7 +319,7 @@ extension ProductDetailViewController: UICollectionViewDataSource, UICollectionV
             
             indicatorView.dataBind(
                 currentIndex: currentImageIndex,
-                totalCount: productDetailData.imageURLs.count
+                totalCount: productDetailData?.imageUrls.count ?? 0
             )
             imageIndicatorView = indicatorView
             return indicatorView
@@ -300,7 +332,6 @@ extension ProductDetailViewController: UICollectionViewDataSource, UICollectionV
             ) as? RecommendHeaderView else {
                 return UICollectionReusableView()
             }
-            
             return headerView
             
         default:
@@ -321,5 +352,39 @@ extension ProductDetailViewController {
         productDetailView.updateHeaderStyle(isScrolled: shouldApplyScrolledStyle)
         setNeedsStatusBarAppearanceUpdate()
         navigationController?.setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    private func fetchProductDetail(productId: Int) {
+        Task {
+            do {
+                let productDetail: ProductDetailResponseDTO = try await BaseService.shared.request(
+                    endPoint: .productDetail(productId: productId)
+                )
+
+                await MainActor.run {
+                    self.productDetailData = productDetail
+                    self.productDetailView.collectionView.reloadData()
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    private func fetchAdProductList() {
+        Task {
+            do {
+                let fetchedAdProductList: [AdProductListResponseDTO] = try await BaseService.shared.request(
+                    endPoint: .adProductList
+                )
+
+                await MainActor.run {
+                    self.adProductList = fetchedAdProductList
+                    self.productDetailView.collectionView.reloadData()
+                }
+            } catch {
+                print(error)
+            }
+        }
     }
 }
