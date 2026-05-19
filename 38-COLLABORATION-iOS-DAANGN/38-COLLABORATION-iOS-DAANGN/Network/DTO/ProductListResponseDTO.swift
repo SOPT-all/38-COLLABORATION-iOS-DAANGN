@@ -5,7 +5,7 @@
 //  Created by 신서연 on 5/18/26.
 //
 
-struct ProductListResponseDTO: Decodable {
+struct ProductListResponseDTO {
     let productId: Int
     let title: String
     let tradeLocation: String
