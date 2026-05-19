@@ -39,7 +39,7 @@ private extension DescriptionCell {
     
     func setLayout() {
         descript.snp.makeConstraints{
-            $0.top.equalTo(contentView).inset(24)
+            $0.top.equalTo(contentView).inset(12)
             $0.horizontalEdges.equalTo(contentView).inset(16)
             $0.bottom.equalTo(contentView).inset(8)
         }

@@ -12,8 +12,11 @@ import Then
 
 final class ProductInfoCell: UICollectionViewCell {
     static let identifier = "ProductInfoCell"
+    private var tagListHeightConstraint: Constraint?
     
     private let productTitle = UILabel().then {
+        $0.numberOfLines = 2
+        $0.lineBreakMode = .byTruncatingTail
         $0.setText("", style: .h3Bold)
     }
     
@@ -62,7 +65,7 @@ private extension ProductInfoCell {
     func setLayout() {
         productTitle.snp.makeConstraints {
             $0.top.equalToSuperview().inset(12)
-            $0.leading.equalToSuperview().inset(16)
+            $0.horizontalEdges.equalToSuperview().inset(16)
         }
         productPrice.snp.makeConstraints {
             $0.top.equalTo(productTitle.snp.bottom).offset(6)
@@ -89,7 +92,8 @@ private extension ProductInfoCell {
         tagListView.snp.makeConstraints {
             $0.top.equalTo(tradeLocation.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(23)
+            tagListHeightConstraint = $0.height.equalTo(23).constraint
+            $0.bottom.equalToSuperview().inset(12)
         }
     }
     
@@ -134,5 +138,6 @@ extension ProductInfoCell {
         tradeLocation.setText(location, style: .label3Regular, color: .gray700)
         bumpTime.setText(formattedElapsedTime(from: time), style: .label3Regular, color: .gray700)
         tagListView.dataBind(tags: tags)
+        tagListHeightConstraint?.update(offset: tagListView.height(forWidth: UIScreen.main.bounds.width))
     }
 }

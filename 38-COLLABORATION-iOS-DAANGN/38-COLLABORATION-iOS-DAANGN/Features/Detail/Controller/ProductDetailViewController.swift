@@ -22,7 +22,7 @@ final class ProductDetailViewController: UIViewController {
     private let bottomBarView = BottomBarView()
     private var toastDismissWorkItem: DispatchWorkItem?
     
-    init(productId: Int = 9) {
+    init(productId: Int = 6) {
         self.productId = productId
         super.init(nibName: nil, bundle: nil)
     }
