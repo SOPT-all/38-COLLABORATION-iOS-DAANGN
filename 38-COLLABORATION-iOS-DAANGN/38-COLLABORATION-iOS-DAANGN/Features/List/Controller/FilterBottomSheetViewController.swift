@@ -24,6 +24,7 @@ class FilterBottomSheetViewController: UIViewController {
         setStyle()
         setUI()
         setLayout()
+        fetchCategories()
     }
 
     override func viewDidLayoutSubviews() {
@@ -155,6 +156,20 @@ private extension FilterBottomSheetViewController {
 
         default:
             break
+        }
+    }
+    
+    private func fetchCategories() {
+        Task {
+            do {
+                let categories: ProductCategoriesResponseDTO = try await BaseService.shared.request(
+                    endPoint: .productCategories
+                )
+                filterView.configure(with: categories)
+                print(categories)
+            } catch {
+                print(error)
+            }
         }
     }
 }

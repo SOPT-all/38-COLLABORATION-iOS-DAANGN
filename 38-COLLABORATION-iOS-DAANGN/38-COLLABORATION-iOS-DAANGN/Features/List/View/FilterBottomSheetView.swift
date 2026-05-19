@@ -28,6 +28,7 @@ final class FilterBottomSheetView: UIView {
     private var allChips: [ChipButton] = []
     private var minPriceTextField = UITextField()
     private var maxPriceTextField = UITextField()
+    private var lastGroupContainerView = UIView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -87,7 +88,7 @@ final class FilterBottomSheetView: UIView {
 
         contentStackView.addArrangedSubview(makePriceSection())
         contentStackView.addArrangedSubview(makeDistanceSection())
-        contentStackView.addArrangedSubview(makeLastGroupSection())
+        contentStackView.addArrangedSubview(lastGroupContainerView)
 
         let bottomSpacer = UIView()
         contentStackView.addArrangedSubview(bottomSpacer)
@@ -218,7 +219,7 @@ private extension FilterBottomSheetView {
 
         let titleLabel = makeSectionTitleLabel("거리")
         let titleWrapper = makeTitleWrapper(titleLabel)
-        let chipsRow = makeChipsRow(chips: ["500m", "1km", "2km", "4km이상"])
+        let chipsRow = makeChipsRow(chips: ["500m", "1km", "2km", "2km이상"])
 
         container.addSubviews(titleWrapper, chipsRow, separator)
 
@@ -238,12 +239,16 @@ private extension FilterBottomSheetView {
         return container
     }
 
-    func makeLastGroupSection() -> UIView {
+    func makeLastGroupSection(
+        conditions: [String],
+        tradeTypes: [String],
+        priceInfos: [String]
+    ) -> UIView {
         let container = UIView()
 
-        let conditionSection = makeSimpleSubSection(title: "상품 상태", chips: ["새상품", "미개봉", "사용감 있음"])
-        let tradeSection = makeSimpleSubSection(title: "거래방식", chips: ["직거래", "문고리거래", "택배 가능"])
-        let priceInfoSection = makeSimpleSubSection(title: "가격 정보", chips: ["나눔", "급처", "네고 가능", "가격 확정"])
+        let conditionSection = makeSimpleSubSection(title: "상품 상태", chips: conditions)
+        let tradeSection = makeSimpleSubSection(title: "거래방식", chips: tradeTypes)
+        let priceInfoSection = makeSimpleSubSection(title: "가격 정보", chips: priceInfos)
 
         let groupStack = UIStackView().then {
             $0.axis = .vertical
@@ -385,5 +390,18 @@ extension FilterBottomSheetView {
         }
         minPriceTextField.text = nil
         maxPriceTextField.text = nil
+    }
+
+    func configure(with categories: ProductCategoriesResponseDTO) {
+        lastGroupContainerView.subviews.forEach { $0.removeFromSuperview() }
+
+        let section = makeLastGroupSection(
+            conditions: categories.conditions.map { $0.name },
+            tradeTypes: categories.tradeTypes.map { $0.name },
+            priceInfos: categories.priceInfos.map { $0.name }
+        )
+
+        lastGroupContainerView.addSubview(section)
+        section.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
 }
