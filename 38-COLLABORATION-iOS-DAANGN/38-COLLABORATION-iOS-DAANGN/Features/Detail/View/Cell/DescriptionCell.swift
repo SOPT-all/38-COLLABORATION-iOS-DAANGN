@@ -34,14 +34,14 @@ final class DescriptionCell: UICollectionViewCell {
 private extension DescriptionCell {
     
     func setUI() {
-        addSubview(descript)
+        contentView.addSubview(descript)
     }
     
     func setLayout() {
         descript.snp.makeConstraints{
-            $0.top.equalToSuperview().inset(24)
-            $0.horizontalEdges.equalToSuperview().inset(16)
-            $0.bottom.equalToSuperview().inset(8)
+            $0.top.equalTo(contentView).inset(12)
+            $0.horizontalEdges.equalTo(contentView).inset(16)
+            $0.bottom.equalTo(contentView).inset(8)
         }
     }
 }

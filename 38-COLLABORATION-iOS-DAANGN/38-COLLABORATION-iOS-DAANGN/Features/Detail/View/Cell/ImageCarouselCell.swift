@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Kingfisher
 import SnapKit
 import Then
 
@@ -45,7 +46,7 @@ private extension ImageCarouselCell {
 
 extension ImageCarouselCell {
     
-    func dataBind(imageName: String) {
-        productImageView.image = UIImage(named: imageName)
+    func dataBind(imageURL: String) {
+        productImageView.kf.setImage(with: URL(string: imageURL))
     }
 }

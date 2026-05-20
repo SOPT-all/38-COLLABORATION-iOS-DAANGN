@@ -70,6 +70,29 @@ extension ProductStateTagListView {
         self.tags = tags
         collectionView.reloadData()
     }
+    
+    func height(forWidth width: CGFloat) -> CGFloat {
+        guard !tags.isEmpty else { return 0 }
+        
+        let availableWidth = width - inset.left - inset.right
+        var currentLineWidth: CGFloat = 0
+        var lineCount = 1
+        
+        tags.forEach {
+            let itemWidth = $0.size(withAttributes: [.font: FontStyle.label3Medium.font]).width + 8
+            let nextWidth = currentLineWidth == 0 ? itemWidth : currentLineWidth + interItemSpacing + itemWidth
+            
+            if nextWidth > availableWidth {
+                lineCount += 1
+                currentLineWidth = itemWidth
+            } else {
+                currentLineWidth = nextWidth
+            }
+        }
+        
+        let visibleLineCount = min(lineCount, 2)
+        return CGFloat(visibleLineCount) * cellHeight + CGFloat(visibleLineCount - 1) * lineSpacing
+    }
 }
 
 extension ProductStateTagListView: UICollectionViewDataSource {
