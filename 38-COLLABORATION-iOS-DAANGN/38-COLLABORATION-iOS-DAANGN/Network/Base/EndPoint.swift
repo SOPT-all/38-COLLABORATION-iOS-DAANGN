@@ -23,7 +23,7 @@ enum EndPoint {
             return "/api/v1/products/\(productId)"
 
         case .productCategories:
-            return "/api/v1/product/categories"
+            return "/api/v1/products/categories"
         }
     }
 
