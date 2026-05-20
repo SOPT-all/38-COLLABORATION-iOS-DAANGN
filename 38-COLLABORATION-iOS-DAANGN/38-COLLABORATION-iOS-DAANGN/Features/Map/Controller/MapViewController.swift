@@ -48,7 +48,7 @@ final class MapViewController: UIViewController {
     }
     
     
-    private let products = MapProduct.dummyList
+    private var products: [MapProduct] = []
 
     private let floatingView = MapProductFloatingView().then {
         $0.isHidden = true
@@ -134,6 +134,7 @@ final class MapViewController: UIViewController {
         setupLayout()
         setupDelegate()
         setupAction()
+        fetchProductList()
     }
     
 
@@ -213,7 +214,6 @@ final class MapViewController: UIViewController {
         }
         
         // MARK: 매물 칩 UI 화면에 올리기
-        // headerView.snp.bottom 기준으로 통일 (safeArea 높이가 기기마다 달라서 생기는 위치 오차 방지)
         firstProductChipView.snp.makeConstraints {
             $0.top.equalTo(headerView.snp.bottom).offset(97)
             $0.leading.equalToSuperview().offset(37)
@@ -415,6 +415,30 @@ final class MapViewController: UIViewController {
     @objc
     private func mapDidTap() {
         hideFloatingView()
+    }
+    
+    private func fetchProductList() {
+        Task {
+            do {
+                let response = try await ProductService.shared.fetchProductList()
+                let products = response.map { $0.toMapProduct() }
+
+                await MainActor.run {
+                    self.products = products
+
+                    if products.isEmpty {
+                        // MARK: 엠티뷰 보여주기
+                        print("상품이 없습니다.")
+                    } else {
+                        print("상품 목록 조회 성공:", products)
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    print("상품 목록 조회 실패:", error)
+                }
+            }
+        }
     }
 }
 
