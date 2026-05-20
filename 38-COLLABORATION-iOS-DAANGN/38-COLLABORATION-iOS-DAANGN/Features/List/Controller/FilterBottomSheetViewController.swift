@@ -165,10 +165,12 @@ private extension FilterBottomSheetViewController {
                 let categories: ProductCategoriesResponseDTO = try await BaseService.shared.request(
                     endPoint: .productCategories
                 )
-                filterView.configure(with: categories)
+                await MainActor.run {
+                    filterView.configure(with: categories)
+                }
                 print(categories)
             } catch {
-                print(error)
+                print("카테고리 조회 실패: \(error)")
             }
         }
     }
