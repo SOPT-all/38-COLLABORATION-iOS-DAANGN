@@ -1,9 +1,37 @@
 # 38-COLLABORATION-iOS-DAANGN
->LETS SOPT 38기 합동세미나 iOS 앱 3조 
+>LETS SOPT 38기 합동세미나 iOS 앱 3조 **당근** 🥕
+>
 
 <br>
 
+<img width="100%" alt="당근_1차 과제-1" src="https://github.com/user-attachments/assets/9a79ab81-1c62-48be-9347-5a3c96e9b37a" />
+<img width="100%" alt="당근_1차 과제-3" src="https://github.com/user-attachments/assets/47e97d8c-f2df-42a7-9d25-3205a477b2f2" />
+
+<br>
+
+## Redesign Points
+
+<img width="100%" alt="개발파트_공유-1" src="https://github.com/user-attachments/assets/f1ec694c-396a-40c9-a588-77b5d7e6f861" />
+<img width="100%" alt="개발파트_공유-2" src="https://github.com/user-attachments/assets/79b53f5d-c490-488f-bdbb-f991ab8f17bf" />
+
+#### ✔︎ Point 1 · 카테고리 Tab 구조로 개편
+반복적으로 사용되던 Chip을 정리하고, 카테고리를 Tab 구조로 격상했어요.
+
+#### ✔︎ Point 2 · 거래 조건 Chip 상단 노출
+거래 결정에 영향을 주는 조건과 상태 정보는 Chip 라벨로 선별해 상단에 노출했어요.
+
+#### ✔︎ Point 3 · 지도 기반의 매물 탐색
+매물의 실제 위치를 지도에서 한눈에 확인할 수 있어요.  
+리스트에서 지도로 자연스럽게 진입하고, 바텀시트 위로 완전히 스크롤시 이전 리스트 화면으로 복귀해요.
+
+#### ✔︎ Point 4 · 간편문의 바텀시트
+채팅 전에 거래 조건을 선택지로 빠르게 전달할 수 있어요.  
+탐색 흐름을 끊지 않고 문의까지 이어지는 UX를 제안했어요.
+
 <div align="center">
+
+<br>
+
 
 ## iOS Developer
 
@@ -73,7 +101,7 @@
 ### Commit Message
 1. 태그는 반드시 **소문자**로 작성합니다.
 2. 내용은 **한글**로 작성합니다.
-3. 제목제목은 50자 이내로, 간결하게 명령조로 작성합니다. 상세 설명이 필요한 경우 description에 작성합니다. `타입: 커밋 내용`
+3. 제목은 50자 이내로, 간결하게 명령조로 작성합니다. 상세 설명이 필요한 경우 description에 작성합니다. `타입: 커밋 내용`
 
 <br>
 
