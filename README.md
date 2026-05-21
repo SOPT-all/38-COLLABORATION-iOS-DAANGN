@@ -37,7 +37,7 @@
 | **신서연** | **정교은** | **이서영** |
 | :---: | :---: | :---: |
 | <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/6129a005-d16d-4698-9a1b-30080aed9aaa" /> | <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/47d228e8-8722-4d26-a6fe-d4c6a8177067" /> | <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/c4edb1b3-c34c-4e52-b5c0-94087178e85c" /> |
-| Map View | Detail View | List View |
+| `Map View` | `Detail View` | `List View` |
 
 
 
