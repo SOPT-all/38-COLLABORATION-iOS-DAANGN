@@ -24,6 +24,7 @@ class ListViewController: UIViewController {
         setLayout()
         setAction()
         fetchProductList()
+        fetchCategories()
     }
 }
 
@@ -59,6 +60,21 @@ private extension ListViewController {
     @objc
     private func mapButtonDidTap() {
         navigateToMap()
+    }
+
+    func fetchCategories() {
+        Task {
+            do {
+                let categories: ProductCategoriesResponseDTO = try await BaseService.shared.request(
+                    endPoint: .productCategories
+                )
+                await MainActor.run {
+                    self.listView.header.configure(with: categories)
+                }
+            } catch {
+                print("카테고리 조회 실패:", error)
+            }
+        }
     }
 
     func fetchProductList() {

@@ -31,6 +31,13 @@ class FullHeader: UIView {
         [searchBar, categoryTabBar, filterChip, filterSortBar].forEach { self.addSubview($0) }
     }
     
+    func configure(with categories: ProductCategoriesResponseDTO) {
+        let titles = categories.conditions.map { $0.name }
+            + categories.tradeTypes.map { $0.name }
+            + categories.priceInfos.map { $0.name }
+        filterChip.configure(with: titles)
+    }
+
     private func setLayout() {
         searchBar.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()

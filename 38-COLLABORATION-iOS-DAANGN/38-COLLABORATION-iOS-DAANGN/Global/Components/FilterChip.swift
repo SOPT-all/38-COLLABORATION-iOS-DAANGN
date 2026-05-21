@@ -12,8 +12,6 @@ import SnapKit
 
 final class FilterChip: UIView {
 
-    private let filters = ["새상품", "미개봉", "나눔", "당일 거래", "문고리 거래", "택배 가능", "도보 5분", "급처", "반값할인"]
-
     private let scrollView = UIScrollView().then {
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
@@ -38,16 +36,6 @@ final class FilterChip: UIView {
     private func setUI() {
         addSubview(scrollView)
         scrollView.addSubview(stackView)
-
-        filters.forEach { title in
-            let button = makeChipButton(title: title)
-            stackView.addArrangedSubview(button)
-            let textWidth = title.size(withAttributes: [.font: FontStyle.label2Regular.font]).width
-            button.snp.makeConstraints {
-                $0.height.equalTo(30)
-                $0.width.equalTo(ceil(textWidth) + 24)
-            }
-        }
     }
 
     private func setLayout() {
@@ -57,6 +45,19 @@ final class FilterChip: UIView {
         stackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.height.equalTo(scrollView.snp.height)
+        }
+    }
+
+    func configure(with titles: [String]) {
+        stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        titles.forEach { title in
+            let button = makeChipButton(title: title)
+            stackView.addArrangedSubview(button)
+            let textWidth = title.size(withAttributes: [.font: FontStyle.label2Regular.font]).width
+            button.snp.makeConstraints {
+                $0.height.equalTo(30)
+                $0.width.equalTo(ceil(textWidth) + 24)
+            }
         }
     }
 
