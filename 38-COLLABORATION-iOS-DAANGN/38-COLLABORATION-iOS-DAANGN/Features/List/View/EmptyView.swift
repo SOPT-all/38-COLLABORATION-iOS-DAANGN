@@ -48,7 +48,7 @@ final class EmptyView: UIView {
 
     private func setLayout() {
         mainLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(230)
+            $0.centerY.equalToSuperview().offset(-50)
             $0.centerX.equalToSuperview()
         }
         subLabel.snp.makeConstraints {
