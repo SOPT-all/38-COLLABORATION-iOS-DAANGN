@@ -4,7 +4,7 @@
 
 <br>
 
-<img width="100%" alt="당근_1차 과제-1" src="https://github.com/user-attachments/assets/9a79ab81-1c62-48be-9347-5a3c96e9b37a" />
+<img width="100%" alt="당근_1차 과제-1" src="https://github.com/user-attachments/assets/777932f1-fe17-4916-99c7-2fd90d4e6ea4" />
 <img width="100%" alt="당근_1차 과제-3" src="https://github.com/user-attachments/assets/47e97d8c-f2df-42a7-9d25-3205a477b2f2" />
 
 <br>
