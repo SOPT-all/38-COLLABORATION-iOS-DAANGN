@@ -40,7 +40,7 @@ class ListTableViewCell: UITableViewCell {
 
     func configure(with product: ProductListResponseDTO) {
         thumbnail.kf.setImage(with: URL(string: product.thumbnailUrl))
-        title.setText(product.title, style: .body1Regular, color: .gray1000)
+        title.setText(product.title, style: .body1Regular, color: .gray1000, lineBreakMode: .byTruncatingTail)
         tradeLocation.setText(product.tradeLocation, style: .label3Regular, color: .gray700)
         lastBumpedAt.setText(formattedElapsedTime(from: product.lastBumpedAt), style: .label3Regular, color: .gray700)
         price.setText(product.price.formatted(), style: .body1Bold, color: .gray1000)
@@ -63,6 +63,16 @@ private extension ListTableViewCell {
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 8
         }
+        title.do {
+            $0.numberOfLines = 1
+            $0.lineBreakMode = .byTruncatingTail
+        }
+        tradeLocation.do {
+            $0.numberOfLines = 1
+            $0.lineBreakMode = .byTruncatingTail
+            $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        }
+        lastBumpedAt.setContentCompressionResistancePriority(.required, for: .horizontal)
         minidot.do {
             $0.backgroundColor = .gray700
             $0.layer.cornerRadius = 1
@@ -116,6 +126,7 @@ private extension ListTableViewCell {
         lastBumpedAt.snp.makeConstraints {
             $0.leading.equalTo(minidot.snp.trailing).offset(4)
             $0.centerY.equalTo(tradeLocation)
+            $0.trailing.lessThanOrEqualTo(title.snp.trailing)
         }
         price.snp.makeConstraints {
             $0.leading.equalTo(title)
