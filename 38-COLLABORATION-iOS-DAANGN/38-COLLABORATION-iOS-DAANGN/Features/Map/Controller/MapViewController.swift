@@ -48,7 +48,9 @@ final class MapViewController: UIViewController {
     }
     
     
+    private var allProducts: [MapProduct] = []
     private var products: [MapProduct] = []
+    private var filterState: FilterState = FilterState()
 
     private let floatingView = MapProductFloatingView().then {
         $0.isHidden = true
@@ -135,6 +137,7 @@ final class MapViewController: UIViewController {
         setupDelegate()
         setupAction()
         fetchProductList()
+        fetchCategories()
     }
     
 
@@ -268,6 +271,10 @@ final class MapViewController: UIViewController {
     
     private func setupDelegate() {
         headerView.searchBar.delegate = self
+        headerView.onFilterSelectionChanged = { [weak self] titles in
+            self?.filterState.tagFilters = Set(titles)
+            self?.applyTagFilter()
+        }
     }
 
     private func setupAction() {
@@ -420,23 +427,45 @@ final class MapViewController: UIViewController {
     private func fetchProductList() {
         Task {
             do {
-                let response = try await ProductService.shared.fetchProductList()
-                let products = response.map { $0.toMapProduct() }
-
+                let response = try await ProductService.shared.fetchProductList(
+                    minPrice: filterState.minPrice,
+                    maxPrice: filterState.maxPrice,
+                    distanceCode: filterState.distanceCode
+                )
                 await MainActor.run {
-                    self.products = products
-
-                    if products.isEmpty {
-                        // MARK: 엠티뷰 보여주기
-                        print("상품이 없습니다.")
-                    } else {
-                        print("상품 목록 조회 성공:", products)
-                    }
+                    self.allProducts = response.map { $0.toMapProduct() }
+                    self.applyTagFilter()
                 }
             } catch {
                 await MainActor.run {
                     print("상품 목록 조회 실패:", error)
                 }
+            }
+        }
+    }
+
+    private func fetchCategories() {
+        Task {
+            do {
+                let categories: ProductCategoriesResponseDTO = try await BaseService.shared.request(
+                    endPoint: .productCategories
+                )
+                await MainActor.run {
+                    self.headerView.configure(with: categories)
+                }
+            } catch {
+                print("카테고리 조회 실패:", error)
+            }
+        }
+    }
+
+    private func applyTagFilter() {
+        let tags = filterState.tagFilters
+        if tags.isEmpty {
+            products = allProducts
+        } else {
+            products = allProducts.filter { product in
+                tags.allSatisfy { product.tags.contains($0) }
             }
         }
     }
@@ -446,6 +475,13 @@ extension MapViewController: SearchBarHeaderDelegate {
     func filterButtonDidTap() {
         let bottomSheet = FilterBottomSheetViewController()
         bottomSheet.modalPresentationStyle = .overFullScreen
+        bottomSheet.filterState = filterState
+        bottomSheet.onApply = { [weak self] newState in
+            guard let self else { return }
+            self.filterState = newState
+            self.headerView.setSelectedFilters(newState.tagFilters)
+            self.fetchProductList()
+        }
         present(bottomSheet, animated: false)
     }
 
