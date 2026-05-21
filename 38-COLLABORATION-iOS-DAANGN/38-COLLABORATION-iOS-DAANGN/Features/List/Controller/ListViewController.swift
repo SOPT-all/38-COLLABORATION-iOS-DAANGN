@@ -46,6 +46,12 @@ private extension ListViewController {
             self?.filterState.tagFilters = Set(titles)
             self?.applyFilters()
         }
+        listView.emptyView.onResetButtonTapped = { [weak self] in
+            guard let self else { return }
+            filterState = FilterState()
+            listView.header.setSelectedFilters([])
+            fetchProductList()
+        }
     }
 
     private func setUI() {
