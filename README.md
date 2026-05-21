@@ -93,9 +93,15 @@
 - 지도 배너 · 지도보기 버튼 탭 → `CATransition` (.fromRight) 으로 Map 화면으로 전환
 - 리스트 셀 탭 → `productId` 전달하여 Detail 화면으로 진입
 
-**공통 컴포넌트 (`Global/`)**
-- `CategoryTabBar`, `ChipButton`, `FilterChip`, `FilterSortBar`
-- `FullHeader`, `SearchBarHeader`, `SimpleHeader`, `ViewToggleButton`
+**공통 컴포넌트 (`Global/Components`)**
+- `CategoryTabBar` — 가로 스크롤 카테고리 탭 바. 선택된 탭 하단에 인디케이터 표시
+- `ChipButton` — 탭 시 선택/해제 상태가 토글되는 버튼. `onToggle` 클로저로 상태 변화 전달
+- `FilterChip` — `ChipButton`을 가로 스크롤로 나열하는 다중선택 칩 컨테이너. 선택된 항목 목록을 `onSelectionChanged`로 전달
+- `FilterSortBar` — "판매중만 보기" · "동네매물만 보기" 체크박스 + 정렬 드롭다운으로 구성된 서브 필터 바
+- `FullHeader` — List 화면 헤더. `SearchBarHeader` + `CategoryTabBar` + `FilterChip` + `FilterSortBar` 조합
+- `SearchBarHeader` — 뒤로가기 버튼 + 검색창 + 필터 버튼으로 구성된 헤더. 필터 버튼 탭 시 delegate로 바텀시트 진입
+- `SimpleHeader` — Map 화면 헤더. `SearchBarHeader` + `FilterChip`만 조합한 경량 버전
+- `ViewToggleButton` — 지도보기 ↔ 목록보기 전환 버튼. 아이콘 + 텍스트 pill 형태
 
 </details>
 
