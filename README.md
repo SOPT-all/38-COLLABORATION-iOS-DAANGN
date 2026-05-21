@@ -33,11 +33,11 @@
 <br>
 
 
-## iOS Developer
+## iOS Developer 🥕
 
 | **신서연** | **정교은** | **이서영** |
 | :---: | :---: | :---: |
-| <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/4cc75e46-1efd-4eb0-928b-2236d28b7e83" /> | <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/e7dfd23c-1a76-47fb-a190-1f0a2cbc634e" /> | <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/dd7ecd7e-e13b-4798-9cbd-aa02555d083e" /> |
+| <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/ff111182-26d1-48fc-a0b6-984f1281d0f5" /> | <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/47d228e8-8722-4d26-a6fe-d4c6a8177067" /> | <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/c4edb1b3-c34c-4e52-b5c0-94087178e85c" /> |
 
 </div>
 
@@ -125,4 +125,5 @@
     └── 📁 Detail/
 └── 📃 Info.plist
 ```
+
 
