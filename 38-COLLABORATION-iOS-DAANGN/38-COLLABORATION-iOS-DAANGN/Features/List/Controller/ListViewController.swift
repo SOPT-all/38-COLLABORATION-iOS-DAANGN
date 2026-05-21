@@ -133,6 +133,14 @@ extension ListViewController: UITableViewDelegate {
         return (hasBanner && indexPath.row == 2) ? 87 : 138
     }
 
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let hasBanner = filteredProducts.count > 1
+        guard hasBanner else { return }
+        if indexPath.row == 1 || indexPath.row == 2 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: tableView.bounds.width, bottom: 0, right: 0)
+        }
+    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         let hasBanner = filteredProducts.count > 1
