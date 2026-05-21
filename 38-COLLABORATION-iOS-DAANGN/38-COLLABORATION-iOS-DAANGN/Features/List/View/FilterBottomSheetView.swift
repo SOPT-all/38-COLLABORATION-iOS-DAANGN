@@ -25,7 +25,7 @@ final class FilterBottomSheetView: UIView {
 
     private var gradientLayer: CAGradientLayer?
 
-    private var allChips: [ChipButton] = []
+    private var allChips: [(button: ChipButton, title: String)] = []
     private var minPriceTextField = UITextField()
     private var maxPriceTextField = UITextField()
     private var lastGroupContainerView = UIView()
@@ -366,7 +366,7 @@ private extension FilterBottomSheetView {
                 ? UIColor.gray800.cgColor
                 : UIColor.gray300.cgColor
         }
-        allChips.append(button)
+        allChips.append((button: button, title: title))
         return button
     }
 }
@@ -384,12 +384,16 @@ extension FilterBottomSheetView {
 
     func reset() {
         allChips.forEach {
-            $0.isSelected = false
-            $0.backgroundColor = .gray00
-            $0.layer.borderColor = UIColor.gray300.cgColor
+            $0.button.isSelected = false
+            $0.button.backgroundColor = .gray00
+            $0.button.layer.borderColor = UIColor.gray300.cgColor
         }
         minPriceTextField.text = nil
         maxPriceTextField.text = nil
+    }
+
+    func selectedTitles() -> [String] {
+        allChips.filter { $0.button.isSelected }.map { $0.title }
     }
 
     func configure(with categories: ProductCategoriesResponseDTO) {

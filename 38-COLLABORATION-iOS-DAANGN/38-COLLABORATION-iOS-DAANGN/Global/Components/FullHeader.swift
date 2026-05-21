@@ -31,6 +31,10 @@ class FullHeader: UIView {
         [searchBar, categoryTabBar, filterChip, filterSortBar].forEach { self.addSubview($0) }
     }
     
+    var onFilterSelectionChanged: (([String]) -> Void)? {
+        didSet { filterChip.onSelectionChanged = onFilterSelectionChanged }
+    }
+
     func configure(with categories: ProductCategoriesResponseDTO) {
         let titles = categories.conditions.map { $0.name }
             + categories.tradeTypes.map { $0.name }

@@ -15,6 +15,16 @@ class ListViewController: UIViewController {
     private let listView = ListView()
     private let mapButton = ViewToggleButton(imageName: "map", title: "지도 보기")
     private var products: [ProductListResponseDTO] = []
+    private var headerFilters: Set<String> = []
+    private var sheetFilters: Set<String> = []
+
+    private var filteredProducts: [ProductListResponseDTO] {
+        let active = headerFilters.union(sheetFilters)
+        guard !active.isEmpty else { return products }
+        return products.filter { product in
+            active.allSatisfy { product.tags.contains($0) }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +44,10 @@ private extension ListViewController {
         listView.tableView.delegate = self
         listView.tableView.dataSource = self
         listView.header.searchBar.delegate = self
+        listView.header.onFilterSelectionChanged = { [weak self] titles in
+            self?.headerFilters = Set(titles)
+            self?.applyFilters()
+        }
     }
 
     private func setUI() {
@@ -62,6 +76,12 @@ private extension ListViewController {
         navigateToMap()
     }
 
+    func applyFilters() {
+        let count = filteredProducts.count
+        listView.tableView.reloadData()
+        listView.emptyView.isHidden = count > 0
+    }
+
     func fetchCategories() {
         Task {
             do {
@@ -83,7 +103,7 @@ private extension ListViewController {
                 let response = try await ProductService.shared.fetchProductList()
                 await MainActor.run {
                     self.products = response
-                    self.listView.tableView.reloadData()
+                    self.applyFilters()
                 }
             } catch {
                 print("매물 목록 조회 실패:", error)
@@ -107,16 +127,18 @@ private extension ListViewController {
 
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.row == 2 ? 87 : 138
+        let hasBanner = filteredProducts.count > 1
+        return (hasBanner && indexPath.row == 2) ? 87 : 138
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        if indexPath.row == 2 {
+        let hasBanner = filteredProducts.count > 1
+        if hasBanner && indexPath.row == 2 {
             navigateToMap()
         } else {
-            let productIndex = indexPath.row < 2 ? indexPath.row : indexPath.row - 1
-            let productId = products[productIndex].productId
+            let productIndex = (hasBanner && indexPath.row > 2) ? indexPath.row - 1 : indexPath.row
+            let productId = filteredProducts[productIndex].productId
             navigationController?.pushViewController(ProductDetailViewController(productId: productId), animated: true)
         }
     }
@@ -124,11 +146,15 @@ extension ListViewController: UITableViewDelegate {
 
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return products.isEmpty ? 0 : products.count + 1
+        let count = filteredProducts.count
+        if count == 0 { return 0 }
+        if count == 1 { return 1 }
+        return count + 1
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 2 {
+        let hasBanner = filteredProducts.count > 1
+        if hasBanner && indexPath.row == 2 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: BannerCell.identifier, for: indexPath) as? BannerCell else {
                 return UITableViewCell()
             }
@@ -138,8 +164,8 @@ extension ListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.identifier, for: indexPath) as? ListTableViewCell else {
             return UITableViewCell()
         }
-        let productIndex = indexPath.row < 2 ? indexPath.row : indexPath.row - 1
-        cell.configure(with: products[productIndex])
+        let productIndex = (hasBanner && indexPath.row > 2) ? indexPath.row - 1 : indexPath.row
+        cell.configure(with: filteredProducts[productIndex])
         return cell
     }
 }
@@ -148,6 +174,10 @@ extension ListViewController: SearchBarHeaderDelegate {
     func filterButtonDidTap() {
         let bottomSheet = FilterBottomSheetViewController()
         bottomSheet.modalPresentationStyle = .overFullScreen
+        bottomSheet.onApply = { [weak self] titles in
+            self?.sheetFilters = Set(titles)
+            self?.applyFilters()
+        }
         present(bottomSheet, animated: false)
     }
 }

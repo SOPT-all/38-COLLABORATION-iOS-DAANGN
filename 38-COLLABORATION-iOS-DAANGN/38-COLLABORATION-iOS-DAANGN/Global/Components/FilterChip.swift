@@ -23,6 +23,9 @@ final class FilterChip: UIView {
         $0.alignment = .center
     }
 
+    private var chipTitlePairs: [(ChipButton, String)] = []
+    var onSelectionChanged: (([String]) -> Void)?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()
@@ -50,8 +53,10 @@ final class FilterChip: UIView {
 
     func configure(with titles: [String]) {
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        chipTitlePairs.removeAll()
         titles.forEach { title in
             let button = makeChipButton(title: title)
+            chipTitlePairs.append((button, title))
             stackView.addArrangedSubview(button)
             let textWidth = title.size(withAttributes: [.font: FontStyle.label2Regular.font]).width
             button.snp.makeConstraints {
@@ -71,11 +76,17 @@ final class FilterChip: UIView {
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 15
 
-        button.onToggle = { [weak button] isSelected in
+        button.onToggle = { [weak self, weak button] isSelected in
             button?.backgroundColor = isSelected ? .gray900 : .gray00
             button?.layer.borderColor = isSelected ? UIColor.gray900.cgColor : UIColor.gray300.cgColor
+            self?.notifySelectionChanged()
         }
 
         return button
+    }
+
+    private func notifySelectionChanged() {
+        let selected = chipTitlePairs.filter { $0.0.isSelected }.map { $0.1 }
+        onSelectionChanged?(selected)
     }
 }

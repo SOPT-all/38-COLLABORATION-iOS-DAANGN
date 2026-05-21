@@ -12,6 +12,8 @@ import SnapKit
 
 class FilterBottomSheetViewController: UIViewController {
 
+    var onApply: (([String]) -> Void)?
+
     private var isAppearAnimationCompleted = false
     private var isExpanded = false
     private let dimmedView = UIView()
@@ -123,11 +125,14 @@ private extension FilterBottomSheetViewController {
     @objc
     private func resetButtonDidTap() {
         filterView.reset()
+        onApply?([])
     }
 
     @objc
     private func applyButtonDidTap() {
+        let selected = filterView.selectedTitles()
         dismissBottomSheet()
+        onApply?(selected)
     }
 
     @objc
