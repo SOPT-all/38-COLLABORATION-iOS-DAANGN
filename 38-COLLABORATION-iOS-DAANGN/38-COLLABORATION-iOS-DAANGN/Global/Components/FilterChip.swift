@@ -12,8 +12,6 @@ import SnapKit
 
 final class FilterChip: UIView {
 
-    private let filters = ["새상품", "미개봉", "나눔", "당일 거래", "문고리 거래", "택배 가능", "도보 5분", "급처", "반값할인"]
-
     private let scrollView = UIScrollView().then {
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
@@ -24,6 +22,9 @@ final class FilterChip: UIView {
         $0.spacing = 8
         $0.alignment = .center
     }
+
+    private var chipTitlePairs: [(ChipButton, String)] = []
+    var onSelectionChanged: (([String]) -> Void)?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,16 +39,6 @@ final class FilterChip: UIView {
     private func setUI() {
         addSubview(scrollView)
         scrollView.addSubview(stackView)
-
-        filters.forEach { title in
-            let button = makeChipButton(title: title)
-            stackView.addArrangedSubview(button)
-            let textWidth = title.size(withAttributes: [.font: FontStyle.label2Regular.font]).width
-            button.snp.makeConstraints {
-                $0.height.equalTo(30)
-                $0.width.equalTo(ceil(textWidth) + 24)
-            }
-        }
     }
 
     private func setLayout() {
@@ -57,6 +48,21 @@ final class FilterChip: UIView {
         stackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.height.equalTo(scrollView.snp.height)
+        }
+    }
+
+    func configure(with titles: [String]) {
+        stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        chipTitlePairs.removeAll()
+        titles.forEach { title in
+            let button = makeChipButton(title: title)
+            chipTitlePairs.append((button, title))
+            stackView.addArrangedSubview(button)
+            let textWidth = title.size(withAttributes: [.font: FontStyle.label2Regular.font]).width
+            button.snp.makeConstraints {
+                $0.height.equalTo(30)
+                $0.width.equalTo(ceil(textWidth) + 24)
+            }
         }
     }
 
@@ -70,11 +76,26 @@ final class FilterChip: UIView {
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 15
 
-        button.onToggle = { [weak button] isSelected in
+        button.onToggle = { [weak self, weak button] isSelected in
             button?.backgroundColor = isSelected ? .gray900 : .gray00
             button?.layer.borderColor = isSelected ? UIColor.gray900.cgColor : UIColor.gray300.cgColor
+            self?.notifySelectionChanged()
         }
 
         return button
+    }
+
+    private func notifySelectionChanged() {
+        let selected = chipTitlePairs.filter { $0.0.isSelected }.map { $0.1 }
+        onSelectionChanged?(selected)
+    }
+
+    func setSelectedTitles(_ titles: Set<String>) {
+        chipTitlePairs.forEach { (button, title) in
+            let selected = titles.contains(title)
+            button.isSelected = selected
+            button.backgroundColor = selected ? .gray900 : .gray00
+            button.layer.borderColor = selected ? UIColor.gray900.cgColor : UIColor.gray300.cgColor
+        }
     }
 }

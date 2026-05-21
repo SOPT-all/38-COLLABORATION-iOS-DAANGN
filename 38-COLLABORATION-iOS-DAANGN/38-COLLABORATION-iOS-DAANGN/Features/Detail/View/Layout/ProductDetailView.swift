@@ -201,7 +201,12 @@ extension ProductDetailView {
     var currentHeaderHeight: CGFloat {
         return headerHeight
     }
-    
+
+    var onChevronButtonTapped: (() -> Void)? {
+        get { headerView.onChevronButtonTapped }
+        set { headerView.onChevronButtonTapped = newValue }
+    }
+
     func updateHeaderStyle(isScrolled: Bool) {
         headerView.updateStyle(isScrolled: isScrolled)
     }

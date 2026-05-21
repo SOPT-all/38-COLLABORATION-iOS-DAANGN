@@ -56,6 +56,9 @@ private extension ProductDetailViewController {
         productDetailView.onImageIndexChanged = { [weak self] index in
             self?.updateCurrentImageIndex(index)
         }
+        productDetailView.onChevronButtonTapped = { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        }
     }
     
     func setUI() {

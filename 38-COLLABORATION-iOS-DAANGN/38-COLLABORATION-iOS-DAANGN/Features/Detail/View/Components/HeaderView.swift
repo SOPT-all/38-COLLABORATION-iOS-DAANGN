@@ -11,7 +11,9 @@ import Then
 import SnapKit
 
 final class HeaderView: UIView {
-    
+
+    var onChevronButtonTapped: (() -> Void)?
+
     private var isScrolledStyleApplied = false
     private let gradientLayer = CAGradientLayer()
     private let buttonContainerView = UIView()
@@ -91,6 +93,12 @@ private extension HeaderView {
         layer.insertSublayer(gradientLayer, at: 0)
         addSubview(buttonContainerView)
         buttonContainerView.addSubviews(chevronButton, homeButton, shareButton, dot3Button)
+        chevronButton.addTarget(self, action: #selector(chevronButtonDidTap), for: .touchUpInside)
+    }
+
+    @objc
+    func chevronButtonDidTap() {
+        onChevronButtonTapped?()
     }
     
     func setLayout() {

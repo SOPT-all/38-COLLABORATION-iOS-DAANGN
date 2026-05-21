@@ -30,6 +30,21 @@ class SimpleHeader: UIView {
         backgroundColor = UIColor.white
     }
     
+    var onFilterSelectionChanged: (([String]) -> Void)? {
+        didSet { filterChip.onSelectionChanged = onFilterSelectionChanged }
+    }
+
+    func configure(with categories: ProductCategoriesResponseDTO) {
+        let titles = categories.conditions.map { $0.name }
+            + categories.tradeTypes.map { $0.name }
+            + categories.priceInfos.map { $0.name }
+        filterChip.configure(with: titles)
+    }
+
+    func setSelectedFilters(_ titles: Set<String>) {
+        filterChip.setSelectedTitles(titles)
+    }
+
     private func setLayout() {
         searchBar.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()

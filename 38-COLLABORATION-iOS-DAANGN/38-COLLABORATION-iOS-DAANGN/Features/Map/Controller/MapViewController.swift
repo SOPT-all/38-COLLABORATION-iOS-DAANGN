@@ -49,6 +49,8 @@ final class MapViewController: UIViewController {
     
     
     private var products: [MapProduct] = []
+    private var filterState: FilterState = FilterState()
+    private var categories: ProductCategoriesResponseDTO?
 
     private let floatingView = MapProductFloatingView().then {
         $0.isHidden = true
@@ -135,6 +137,7 @@ final class MapViewController: UIViewController {
         setupDelegate()
         setupAction()
         fetchProductList()
+        fetchCategories()
     }
     
 
@@ -268,6 +271,14 @@ final class MapViewController: UIViewController {
     
     private func setupDelegate() {
         headerView.searchBar.delegate = self
+        headerView.onFilterSelectionChanged = { [weak self] names in
+            guard let self, let categories = self.categories else { return }
+            let selectedNames = Set(names)
+            self.filterState.conditionCodes = Set(categories.conditions.filter { selectedNames.contains($0.name) }.map { $0.code })
+            self.filterState.tradeTypeCodes = Set(categories.tradeTypes.filter { selectedNames.contains($0.name) }.map { $0.code })
+            self.filterState.priceInfoCodes = Set(categories.priceInfos.filter { selectedNames.contains($0.name) }.map { $0.code })
+            self.fetchProductList()
+        }
     }
 
     private func setupAction() {
@@ -420,23 +431,37 @@ final class MapViewController: UIViewController {
     private func fetchProductList() {
         Task {
             do {
-                let response = try await ProductService.shared.fetchProductList()
-                let products = response.map { $0.toMapProduct() }
-
+                let response = try await ProductService.shared.fetchProductList(
+                    minPrice: filterState.minPrice,
+                    maxPrice: filterState.maxPrice,
+                    distanceCode: filterState.distanceCode,
+                    conditionCodes: filterState.conditionCodes,
+                    tradeTypeCodes: filterState.tradeTypeCodes,
+                    priceInfoCodes: filterState.priceInfoCodes
+                )
                 await MainActor.run {
-                    self.products = products
-
-                    if products.isEmpty {
-                        // MARK: 엠티뷰 보여주기
-                        print("상품이 없습니다.")
-                    } else {
-                        print("상품 목록 조회 성공:", products)
-                    }
+                    self.products = response.map { $0.toMapProduct() }
                 }
             } catch {
                 await MainActor.run {
                     print("상품 목록 조회 실패:", error)
                 }
+            }
+        }
+    }
+
+    private func fetchCategories() {
+        Task {
+            do {
+                let categories: ProductCategoriesResponseDTO = try await BaseService.shared.request(
+                    endPoint: .productCategories
+                )
+                await MainActor.run {
+                    self.categories = categories
+                    self.headerView.configure(with: categories)
+                }
+            } catch {
+                print("카테고리 조회 실패:", error)
             }
         }
     }
@@ -446,6 +471,19 @@ extension MapViewController: SearchBarHeaderDelegate {
     func filterButtonDidTap() {
         let bottomSheet = FilterBottomSheetViewController()
         bottomSheet.modalPresentationStyle = .overFullScreen
+        bottomSheet.filterState = filterState
+        bottomSheet.onApply = { [weak self] newState in
+            guard let self else { return }
+            self.filterState = newState
+            if let categories = self.categories {
+                var selectedNames = Set<String>()
+                newState.conditionCodes.forEach { code in if let item = categories.conditions.first(where: { $0.code == code }) { selectedNames.insert(item.name) } }
+                newState.tradeTypeCodes.forEach { code in if let item = categories.tradeTypes.first(where: { $0.code == code }) { selectedNames.insert(item.name) } }
+                newState.priceInfoCodes.forEach { code in if let item = categories.priceInfos.first(where: { $0.code == code }) { selectedNames.insert(item.name) } }
+                self.headerView.setSelectedFilters(selectedNames)
+            }
+            self.fetchProductList()
+        }
         present(bottomSheet, animated: false)
     }
 

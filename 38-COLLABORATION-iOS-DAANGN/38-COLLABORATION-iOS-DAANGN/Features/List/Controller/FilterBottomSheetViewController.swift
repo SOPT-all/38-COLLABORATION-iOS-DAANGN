@@ -12,6 +12,9 @@ import SnapKit
 
 class FilterBottomSheetViewController: UIViewController {
 
+    var onApply: ((FilterState) -> Void)?
+    var filterState: FilterState = FilterState()
+
     private var isAppearAnimationCompleted = false
     private var isExpanded = false
     private let dimmedView = UIView()
@@ -123,11 +126,22 @@ private extension FilterBottomSheetViewController {
     @objc
     private func resetButtonDidTap() {
         filterView.reset()
+        onApply?(FilterState())
     }
 
     @objc
     private func applyButtonDidTap() {
+        let range = filterView.priceRange()
+        let state = FilterState(
+            conditionCodes: Set(filterView.selectedConditionCodes()),
+            tradeTypeCodes: Set(filterView.selectedTradeTypeCodes()),
+            priceInfoCodes: Set(filterView.selectedPriceInfoCodes()),
+            minPrice: range.min,
+            maxPrice: range.max,
+            distanceCode: filterView.selectedDistanceCode()
+        )
         dismissBottomSheet()
+        onApply?(state)
     }
 
     @objc
@@ -167,8 +181,8 @@ private extension FilterBottomSheetViewController {
                 )
                 await MainActor.run {
                     filterView.configure(with: categories)
+                    filterView.restore(state: filterState)
                 }
-                print(categories)
             } catch {
                 print("카테고리 조회 실패: \(error)")
             }
