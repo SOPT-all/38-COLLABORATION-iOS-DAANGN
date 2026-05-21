@@ -35,6 +35,10 @@ class FullHeader: UIView {
         didSet { filterChip.onSelectionChanged = onFilterSelectionChanged }
     }
 
+    func setSelectedFilters(_ titles: Set<String>) {
+        filterChip.setSelectedTitles(titles)
+    }
+
     func configure(with categories: ProductCategoriesResponseDTO) {
         let titles = categories.conditions.map { $0.name }
             + categories.tradeTypes.map { $0.name }

@@ -15,14 +15,12 @@ class ListViewController: UIViewController {
     private let listView = ListView()
     private let mapButton = ViewToggleButton(imageName: "map", title: "지도 보기")
     private var products: [ProductListResponseDTO] = []
-    private var headerFilters: Set<String> = []
-    private var sheetFilters: Set<String> = []
+    private var filterState: FilterState = FilterState()
 
     private var filteredProducts: [ProductListResponseDTO] {
-        let active = headerFilters.union(sheetFilters)
-        guard !active.isEmpty else { return products }
+        guard !filterState.tagFilters.isEmpty else { return products }
         return products.filter { product in
-            active.allSatisfy { product.tags.contains($0) }
+            filterState.tagFilters.allSatisfy { product.tags.contains($0) }
         }
     }
 
@@ -45,7 +43,7 @@ private extension ListViewController {
         listView.tableView.dataSource = self
         listView.header.searchBar.delegate = self
         listView.header.onFilterSelectionChanged = { [weak self] titles in
-            self?.headerFilters = Set(titles)
+            self?.filterState.tagFilters = Set(titles)
             self?.applyFilters()
         }
     }
@@ -100,7 +98,11 @@ private extension ListViewController {
     func fetchProductList() {
         Task {
             do {
-                let response = try await ProductService.shared.fetchProductList()
+                let response = try await ProductService.shared.fetchProductList(
+                    minPrice: filterState.minPrice,
+                    maxPrice: filterState.maxPrice,
+                    distanceCode: filterState.distanceCode
+                )
                 await MainActor.run {
                     self.products = response
                     self.applyFilters()
@@ -174,9 +176,12 @@ extension ListViewController: SearchBarHeaderDelegate {
     func filterButtonDidTap() {
         let bottomSheet = FilterBottomSheetViewController()
         bottomSheet.modalPresentationStyle = .overFullScreen
-        bottomSheet.onApply = { [weak self] titles in
-            self?.sheetFilters = Set(titles)
-            self?.applyFilters()
+        bottomSheet.filterState = filterState
+        bottomSheet.onApply = { [weak self] newState in
+            guard let self else { return }
+            self.filterState = newState
+            self.listView.header.setSelectedFilters(newState.tagFilters)
+            self.fetchProductList()
         }
         present(bottomSheet, animated: false)
     }

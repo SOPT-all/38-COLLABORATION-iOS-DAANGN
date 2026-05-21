@@ -89,4 +89,13 @@ final class FilterChip: UIView {
         let selected = chipTitlePairs.filter { $0.0.isSelected }.map { $0.1 }
         onSelectionChanged?(selected)
     }
+
+    func setSelectedTitles(_ titles: Set<String>) {
+        chipTitlePairs.forEach { (button, title) in
+            let selected = titles.contains(title)
+            button.isSelected = selected
+            button.backgroundColor = selected ? .gray900 : .gray00
+            button.layer.borderColor = selected ? UIColor.gray900.cgColor : UIColor.gray300.cgColor
+        }
+    }
 }
