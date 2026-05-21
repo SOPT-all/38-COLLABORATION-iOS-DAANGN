@@ -26,7 +26,9 @@ final class FilterBottomSheetView: UIView {
     private var gradientLayer: CAGradientLayer?
 
     private var allChips: [(button: ChipButton, title: String)] = []
-    private var categoryChips: [(button: ChipButton, title: String)] = []
+    private var conditionChips: [(button: ChipButton, code: String)] = []
+    private var tradeTypeChips: [(button: ChipButton, code: String)] = []
+    private var priceInfoChips: [(button: ChipButton, code: String)] = []
     private var distanceChips: [(button: ChipButton, code: String)] = []
     private var minPriceTextField = UITextField()
     private var maxPriceTextField = UITextField()
@@ -249,15 +251,15 @@ private extension FilterBottomSheetView {
     }
 
     func makeLastGroupSection(
-        conditions: [String],
-        tradeTypes: [String],
-        priceInfos: [String]
+        conditions: [(name: String, code: String)],
+        tradeTypes: [(name: String, code: String)],
+        priceInfos: [(name: String, code: String)]
     ) -> UIView {
         let container = UIView()
 
-        let conditionSection = makeCategorySubSection(title: "상품 상태", chips: conditions)
-        let tradeSection = makeCategorySubSection(title: "거래방식", chips: tradeTypes)
-        let priceInfoSection = makeCategorySubSection(title: "가격 정보", chips: priceInfos)
+        let conditionSection = makeCategorySubSection(title: "상품 상태", chips: conditions, into: &conditionChips)
+        let tradeSection = makeCategorySubSection(title: "거래방식", chips: tradeTypes, into: &tradeTypeChips)
+        let priceInfoSection = makeCategorySubSection(title: "가격 정보", chips: priceInfos, into: &priceInfoChips)
 
         let groupStack = UIStackView().then {
             $0.axis = .vertical
@@ -277,11 +279,11 @@ private extension FilterBottomSheetView {
         return container
     }
 
-    func makeCategorySubSection(title: String, chips: [String]) -> UIView {
+    func makeCategorySubSection(title: String, chips: [(name: String, code: String)], into store: inout [(button: ChipButton, code: String)]) -> UIView {
         let container = UIView()
         let titleLabel = makeSectionTitleLabel(title)
         let titleWrapper = makeTitleWrapper(titleLabel)
-        let chipsRow = makeCategoryChipsRow(chips: chips)
+        let chipsRow = makeCategoryChipsRow(chips: chips, into: &store)
 
         container.addSubviews(titleWrapper, chipsRow)
 
@@ -335,7 +337,7 @@ private extension FilterBottomSheetView {
         }
     }
 
-    func makeCategoryChipsRow(chips: [String]) -> UIView {
+    func makeCategoryChipsRow(chips: [(name: String, code: String)], into store: inout [(button: ChipButton, code: String)]) -> UIView {
         let scrollView = UIScrollView().then {
             $0.showsHorizontalScrollIndicator = false
             $0.alwaysBounceHorizontal = false
@@ -346,9 +348,9 @@ private extension FilterBottomSheetView {
             $0.alignment = .center
         }
 
-        chips.forEach { title in
-            let button = makeChipButton(title: title)
-            categoryChips.append((button: button, title: title))
+        chips.forEach { pair in
+            let button = makeChipButton(title: pair.name)
+            store.append((button: button, code: pair.code))
             stackView.addArrangedSubview(button)
         }
 
@@ -476,8 +478,16 @@ extension FilterBottomSheetView {
         maxPriceTextField.text = nil
     }
 
-    func selectedTitles() -> [String] {
-        categoryChips.filter { $0.button.isSelected }.map { $0.title }
+    func selectedConditionCodes() -> [String] {
+        conditionChips.filter { $0.button.isSelected }.map { $0.code }
+    }
+
+    func selectedTradeTypeCodes() -> [String] {
+        tradeTypeChips.filter { $0.button.isSelected }.map { $0.code }
+    }
+
+    func selectedPriceInfoCodes() -> [String] {
+        priceInfoChips.filter { $0.button.isSelected }.map { $0.code }
     }
 
     func selectedDistanceCode() -> String? {
@@ -491,8 +501,20 @@ extension FilterBottomSheetView {
     }
 
     func restore(state: FilterState) {
-        categoryChips.forEach { pair in
-            let selected = state.tagFilters.contains(pair.title)
+        conditionChips.forEach { pair in
+            let selected = state.conditionCodes.contains(pair.code)
+            pair.button.isSelected = selected
+            pair.button.backgroundColor = selected ? .gray800 : .gray00
+            pair.button.layer.borderColor = selected ? UIColor.gray800.cgColor : UIColor.gray300.cgColor
+        }
+        tradeTypeChips.forEach { pair in
+            let selected = state.tradeTypeCodes.contains(pair.code)
+            pair.button.isSelected = selected
+            pair.button.backgroundColor = selected ? .gray800 : .gray00
+            pair.button.layer.borderColor = selected ? UIColor.gray800.cgColor : UIColor.gray300.cgColor
+        }
+        priceInfoChips.forEach { pair in
+            let selected = state.priceInfoCodes.contains(pair.code)
             pair.button.isSelected = selected
             pair.button.backgroundColor = selected ? .gray800 : .gray00
             pair.button.layer.borderColor = selected ? UIColor.gray800.cgColor : UIColor.gray300.cgColor
@@ -509,12 +531,14 @@ extension FilterBottomSheetView {
 
     func configure(with categories: ProductCategoriesResponseDTO) {
         lastGroupContainerView.subviews.forEach { $0.removeFromSuperview() }
-        categoryChips.removeAll()
+        conditionChips.removeAll()
+        tradeTypeChips.removeAll()
+        priceInfoChips.removeAll()
 
         let section = makeLastGroupSection(
-            conditions: categories.conditions.map { $0.name },
-            tradeTypes: categories.tradeTypes.map { $0.name },
-            priceInfos: categories.priceInfos.map { $0.name }
+            conditions: categories.conditions.map { (name: $0.name, code: $0.code) },
+            tradeTypes: categories.tradeTypes.map { (name: $0.name, code: $0.code) },
+            priceInfos: categories.priceInfos.map { (name: $0.name, code: $0.code) }
         )
 
         lastGroupContainerView.addSubview(section)

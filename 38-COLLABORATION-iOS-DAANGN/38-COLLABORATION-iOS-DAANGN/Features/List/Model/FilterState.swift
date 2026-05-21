@@ -6,7 +6,9 @@
 //
 
 struct FilterState {
-    var tagFilters: Set<String> = []
+    var conditionCodes: Set<String> = []
+    var tradeTypeCodes: Set<String> = []
+    var priceInfoCodes: Set<String> = []
     var minPrice: Int? = nil
     var maxPrice: Int? = nil
     var distanceCode: String? = nil

@@ -48,9 +48,9 @@ final class MapViewController: UIViewController {
     }
     
     
-    private var allProducts: [MapProduct] = []
     private var products: [MapProduct] = []
     private var filterState: FilterState = FilterState()
+    private var categories: ProductCategoriesResponseDTO?
 
     private let floatingView = MapProductFloatingView().then {
         $0.isHidden = true
@@ -271,9 +271,13 @@ final class MapViewController: UIViewController {
     
     private func setupDelegate() {
         headerView.searchBar.delegate = self
-        headerView.onFilterSelectionChanged = { [weak self] titles in
-            self?.filterState.tagFilters = Set(titles)
-            self?.applyTagFilter()
+        headerView.onFilterSelectionChanged = { [weak self] names in
+            guard let self, let categories = self.categories else { return }
+            let selectedNames = Set(names)
+            self.filterState.conditionCodes = Set(categories.conditions.filter { selectedNames.contains($0.name) }.map { $0.code })
+            self.filterState.tradeTypeCodes = Set(categories.tradeTypes.filter { selectedNames.contains($0.name) }.map { $0.code })
+            self.filterState.priceInfoCodes = Set(categories.priceInfos.filter { selectedNames.contains($0.name) }.map { $0.code })
+            self.fetchProductList()
         }
     }
 
@@ -430,11 +434,13 @@ final class MapViewController: UIViewController {
                 let response = try await ProductService.shared.fetchProductList(
                     minPrice: filterState.minPrice,
                     maxPrice: filterState.maxPrice,
-                    distanceCode: filterState.distanceCode
+                    distanceCode: filterState.distanceCode,
+                    conditionCodes: filterState.conditionCodes,
+                    tradeTypeCodes: filterState.tradeTypeCodes,
+                    priceInfoCodes: filterState.priceInfoCodes
                 )
                 await MainActor.run {
-                    self.allProducts = response.map { $0.toMapProduct() }
-                    self.applyTagFilter()
+                    self.products = response.map { $0.toMapProduct() }
                 }
             } catch {
                 await MainActor.run {
@@ -451,21 +457,11 @@ final class MapViewController: UIViewController {
                     endPoint: .productCategories
                 )
                 await MainActor.run {
+                    self.categories = categories
                     self.headerView.configure(with: categories)
                 }
             } catch {
                 print("카테고리 조회 실패:", error)
-            }
-        }
-    }
-
-    private func applyTagFilter() {
-        let tags = filterState.tagFilters
-        if tags.isEmpty {
-            products = allProducts
-        } else {
-            products = allProducts.filter { product in
-                tags.allSatisfy { product.tags.contains($0) }
             }
         }
     }
@@ -479,7 +475,13 @@ extension MapViewController: SearchBarHeaderDelegate {
         bottomSheet.onApply = { [weak self] newState in
             guard let self else { return }
             self.filterState = newState
-            self.headerView.setSelectedFilters(newState.tagFilters)
+            if let categories = self.categories {
+                var selectedNames = Set<String>()
+                newState.conditionCodes.forEach { code in if let item = categories.conditions.first(where: { $0.code == code }) { selectedNames.insert(item.name) } }
+                newState.tradeTypeCodes.forEach { code in if let item = categories.tradeTypes.first(where: { $0.code == code }) { selectedNames.insert(item.name) } }
+                newState.priceInfoCodes.forEach { code in if let item = categories.priceInfos.first(where: { $0.code == code }) { selectedNames.insert(item.name) } }
+                self.headerView.setSelectedFilters(selectedNames)
+            }
             self.fetchProductList()
         }
         present(bottomSheet, animated: false)

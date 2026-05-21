@@ -133,7 +133,9 @@ private extension FilterBottomSheetViewController {
     private func applyButtonDidTap() {
         let range = filterView.priceRange()
         let state = FilterState(
-            tagFilters: Set(filterView.selectedTitles()),
+            conditionCodes: Set(filterView.selectedConditionCodes()),
+            tradeTypeCodes: Set(filterView.selectedTradeTypeCodes()),
+            priceInfoCodes: Set(filterView.selectedPriceInfoCodes()),
             minPrice: range.min,
             maxPrice: range.max,
             distanceCode: filterView.selectedDistanceCode()
