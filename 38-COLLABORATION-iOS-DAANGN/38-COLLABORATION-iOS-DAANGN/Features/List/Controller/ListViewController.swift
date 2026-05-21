@@ -13,8 +13,8 @@ import SnapKit
 class ListViewController: UIViewController {
 
     private let listView = ListView()
-
     private let mapButton = ViewToggleButton(imageName: "map", title: "지도 보기")
+    private var products: [ProductListResponseDTO] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +23,7 @@ class ListViewController: UIViewController {
         setUI()
         setLayout()
         setAction()
+        fetchProductList()
     }
 }
 
@@ -60,6 +61,20 @@ private extension ListViewController {
         navigateToMap()
     }
 
+    func fetchProductList() {
+        Task {
+            do {
+                let response = try await ProductService.shared.fetchProductList()
+                await MainActor.run {
+                    self.products = response
+                    self.listView.tableView.reloadData()
+                }
+            } catch {
+                print("매물 목록 조회 실패:", error)
+            }
+        }
+    }
+
     func navigateToMap() {
         let mapViewController = MapViewController()
 
@@ -76,10 +91,7 @@ private extension ListViewController {
 
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 2 {
-            return 87
-        }
-        return 138
+        return indexPath.row == 2 ? 87 : 138
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -87,26 +99,31 @@ extension ListViewController: UITableViewDelegate {
         if indexPath.row == 2 {
             navigateToMap()
         } else {
-            navigationController?.pushViewController(ProductDetailViewController(), animated: true)
+            let productIndex = indexPath.row < 2 ? indexPath.row : indexPath.row - 1
+            let productId = products[productIndex].productId
+            navigationController?.pushViewController(ProductDetailViewController(productId: productId), animated: true)
         }
     }
 }
+
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-          return 11
-      }
-      
+        return products.isEmpty ? 0 : products.count + 1
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 2 {
-            guard let bannerCell = tableView.dequeueReusableCell(withIdentifier: BannerCell.identifier, for: indexPath) as? BannerCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: BannerCell.identifier, for: indexPath) as? BannerCell else {
                 return UITableViewCell()
             }
-            return bannerCell
+            return cell
         }
 
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.identifier, for: indexPath) as? ListTableViewCell else {
             return UITableViewCell()
         }
+        let productIndex = indexPath.row < 2 ? indexPath.row : indexPath.row - 1
+        cell.configure(with: products[productIndex])
         return cell
     }
 }

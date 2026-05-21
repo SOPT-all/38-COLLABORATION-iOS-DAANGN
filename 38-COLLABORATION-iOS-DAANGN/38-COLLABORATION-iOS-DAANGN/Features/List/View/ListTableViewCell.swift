@@ -9,6 +9,7 @@ import UIKit
 
 import Then
 import SnapKit
+import Kingfisher
 
 class ListTableViewCell: UITableViewCell {
     
@@ -36,6 +37,17 @@ class ListTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
       fatalError("init(coder:) has not been implemented")
     }
+
+    func configure(with product: ProductListResponseDTO) {
+        thumbnail.kf.setImage(with: URL(string: product.thumbnailUrl))
+        title.setText(product.title, style: .body1Regular, color: .gray1000)
+        tradeLocation.setText(product.tradeLocation, style: .label3Regular, color: .gray700)
+        lastBumpedAt.setText(formattedElapsedTime(from: product.lastBumpedAt), style: .label3Regular, color: .gray700)
+        price.setText(product.price.formatted(), style: .body1Bold, color: .gray1000)
+        likeCount.setText("\(product.likeCount)", style: .label2Medium, color: .gray700)
+        likeIcon.tintColor = .gray500
+        tags.configure(tags: product.tags)
+    }
 }
 
 private extension ListTableViewCell {
@@ -47,29 +59,40 @@ private extension ListTableViewCell {
     private func setStyle() {
         selectionStyle = .none
         thumbnail.do {
-            $0.image = UIImage(named: "lamp-ex")
             $0.contentMode = .scaleAspectFill
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 8
         }
-        title.setText("무드등 스탠드 조명", style: .body1Regular, color: .gray1000)
-        tradeLocation.setText("수원 매산로1가", style: .label3Regular, color: .gray700)
         minidot.do {
             $0.backgroundColor = .gray700
             $0.layer.cornerRadius = 1
         }
-        lastBumpedAt.setText("끌올 16분 전", style: .label3Regular, color: .gray700)
-        price.setText("17,000", style: .body1Bold, color: .gray1000)
         won.setText("원", style: .body1Medium, color: .gray1000)
         likeIcon.do {
             $0.image = .heartFill?.withRenderingMode(.alwaysTemplate)
             $0.tintColor = .gray500
         }
-        likeCount.setText("3", style: .label2Medium, color: .gray700)
-
-        tags.configure(tags: ["새상품", "문고리거래", "직거래", "택배거래", "나눔"])
     }
     
+    private func formattedElapsedTime(from dateString: String) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = .current
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+
+        guard let date = formatter.date(from: dateString) else { return dateString }
+
+        let elapsed = max(0, Int(Date().timeIntervalSince(date)))
+        let minutes = elapsed / 60
+        let hours = minutes / 60
+        let days = hours / 24
+
+        if minutes < 1 { return "끌올 방금 전" }
+        if minutes < 60 { return "끌올 \(minutes)분 전" }
+        if hours < 24 { return "끌올 \(hours)시간 전" }
+        return "끌올 \(days)일 전"
+    }
+
     private func setLayout() {
         thumbnail.snp.makeConstraints {
             $0.width.height.equalTo(114)
