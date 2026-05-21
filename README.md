@@ -28,7 +28,6 @@
 채팅 전에 거래 조건을 선택지로 빠르게 전달할 수 있어요.  
 탐색 흐름을 끊지 않고 문의까지 이어지는 UX를 제안했어요.
 
-<div align="center">
 
 <br>
 
@@ -38,12 +37,71 @@
 | **신서연** | **정교은** | **이서영** |
 | :---: | :---: | :---: |
 | <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/6129a005-d16d-4698-9a1b-30080aed9aaa" /> | <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/47d228e8-8722-4d26-a6fe-d4c6a8177067" /> | <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/c4edb1b3-c34c-4e52-b5c0-94087178e85c" /> |
+| Map View | Detail View | List View |
 
-</div>
+
+
+### 상세 구현 내용
+
+<details>
+<summary><b>신서연</b></summary>
 
 <br>
 
-<div align="center">
+- 지도 위에 5개의 매물 칩(`MapProductChipView`) 배치
+  - 칩 탭 시 선택 상태 칩(`SelectedMapProductChipView`)으로 전환
+  - 하단에 플로팅 카드(`MapProductFloatingView`) 애니메이션으로 등장
+  - 플로팅 카드 등장 시 목록보기 버튼 · 현재위치 버튼도 함께 위로 이동 (SnapKit constraint 업데이트 + 애니메이션)
+- 지도 빈 영역 탭 → 칩 선택 해제 + 플로팅 카드 사라짐
+- 상단 헤더 필터 버튼 탭 → 필터 바텀시트 진입 (List와 동일한 `FilterBottomSheetViewController` 공유)
+- 목록보기 버튼 탭 → `CATransition` (.fromLeft) 으로 List 화면으로 전환
+- 실제 매물 데이터는 API로 fetch하여 플로팅 카드에 반영
+
+</details>
+
+<details>
+<summary><b>정교은</b></summary>
+
+<br>
+
+- `UICollectionView` (CompositionalLayout) 기반으로 섹션 구성
+  - 이미지 캐러셀 / 판매자 프로필 / 상품 정보 / 상품 설명 / 거래 장소 / 추천 상품
+- 이미지 캐러셀 가로 페이징 + `ImageIndicatorView`로 현재 인덱스 표시
+- 스크롤 시 헤더 스타일 전환: 이미지 하단에 헤더가 닿는 시점에 배경·아이콘 색상 변경 + StatusBar 스타일도 함께 전환
+- 추천 상품 가로 스크롤
+- 하단 바 찜 버튼 활성/비활성 토글
+- 채팅하기 버튼 탭 → 간편문의 바텀시트 등장
+  - 5개 옵션 라디오 버튼 (첫 번째 옵션 디폴트 선택)
+  - 핸들바 아래로 80px 이상 드래그 or dimmed 영역 탭 → 바텀시트 닫힘
+  - "직접 입력" 선택 시 텍스트필드 노출, 전송하기 버튼 비활성화 → 텍스트 입력 시 활성화
+  - 전송하기 탭 → 바텀시트 닫힘 + 하단에서 토스트 슬라이드 업 → 2.5초 후 자동 dismiss
+
+</details>
+
+<details>
+<summary><b>이서영</b></summary>
+
+<br>
+
+**List View**
+- 헤더 필터 칩 다중선택 → API 필터 파라미터(거래조건 · 거래방식 · 가격정보)로 매물 목록 재조회
+- 빈 결과 시 `EmptyView` 노출 + 초기화 버튼으로 필터 리셋
+- 필터 버튼 탭 → `FilterBottomSheetViewController` 진입
+  - 화면 높이의 80%로 펼쳐짐 → 핸들바 위로 드래그 시 전체 확장
+  - 거래조건 · 거래방식 · 가격정보 칩 토글, 가격 범위 텍스트필드, 초기화 · 적용 버튼
+- 매물이 2개 이상일 경우 3번째 row에 지도 배너 자동 삽입
+- 지도 배너 · 지도보기 버튼 탭 → `CATransition` (.fromRight) 으로 Map 화면으로 전환
+- 리스트 셀 탭 → `productId` 전달하여 Detail 화면으로 진입
+
+**공통 컴포넌트 (`Global/`)**
+- `CategoryTabBar`, `ChipButton`, `FilterChip`, `FilterSortBar`
+- `FullHeader`, `SearchBarHeader`, `SimpleHeader`, `ViewToggleButton`
+
+</details>
+
+<br>
+
+
 
 ## 개발 환경
 
@@ -53,11 +111,20 @@
 
 <br>
 
+## Architecture
+
+<img src="https://img.shields.io/badge/MVC-000000?style=for-the-badge&logo=swift&logoColor=white">
+
+각 Feature는 `Controller / View / Model` 레이어로 구성되며, `Global`에 공용 컴포넌트와 Extension을 분리해 관리합니다.
+
+<br>
+
 ## Library & Stack
 
 <img src="https://img.shields.io/badge/uikit-2396F3?style=for-the-badge&logo=uikit&logoColor=white">
 <img src="https://img.shields.io/badge/snapkit-FFFC00?style=for-the-badge&logo=snapchat&logoColor=white">
 <img src="https://img.shields.io/badge/Then-000000?style=for-the-badge&logo=swift&logoColor=white">
+<img src="https://img.shields.io/badge/Kingfisher-F05138?style=for-the-badge&logo=swift&logoColor=white">
 
 <br>
 
@@ -67,7 +134,7 @@
 <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
 <img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">
 
-</div>
+
 
 <br>
 
@@ -112,16 +179,25 @@
 │   ├── 📃 AppDelegate.swift
 │   └── 📃 SceneDelegate.swift
 ├── 📁 Global/
-│   ├── 📁 Extension/
+│   ├── 📁 Components/
+│   └── 📁 Extension/
 ├── 📁 Network/
-│   └── 📁 DTO/
+│   ├── 📁 Base/
+│   ├── 📁 DTO/
 │   └── 📁 Service/
 ├── 📁 Resources/
-│   └── 📃 Assets.xcassets
+│   ├── 📃 Assets.xcassets
 │   └── 📁 Fonts
 └── 📁 Features/
     ├── 📁 List/
+    │   ├── 📁 Controller/
+    │   ├── 📁 Model/
+    │   └── 📁 View/
     ├── 📁 Map/
+    │   ├── 📁 Controller/
+    │   ├── 📁 Model/
+    │   └── 📁 View/
     └── 📁 Detail/
-└── 📃 Info.plist
+        ├── 📁 Controller/
+        └── 📁 View/
 ```
