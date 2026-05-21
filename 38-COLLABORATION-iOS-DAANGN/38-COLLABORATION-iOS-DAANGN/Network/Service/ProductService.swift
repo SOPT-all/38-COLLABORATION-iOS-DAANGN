@@ -13,9 +13,13 @@ final class ProductService {
 
     private init() {}
 
-    func fetchProductList() async throws -> [ProductListResponseDTO] {
+    func fetchProductList(
+        minPrice: Int? = nil,
+        maxPrice: Int? = nil,
+        distanceCode: String? = nil
+    ) async throws -> [ProductListResponseDTO] {
         return try await BaseService.shared.request(
-            endPoint: .productList
+            endPoint: .productList(minPrice: minPrice, maxPrice: maxPrice, distanceCode: distanceCode)
         )
     }
 }

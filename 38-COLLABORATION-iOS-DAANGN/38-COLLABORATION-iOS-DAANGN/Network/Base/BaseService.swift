@@ -20,13 +20,10 @@ final class BaseService {
             throw NetworkError.invalidURL
         }
 
-        let urlString = baseURL + endPoint.path
+        var components = URLComponents(string: baseURL + endPoint.path)
+        components?.queryItems = endPoint.queryItems
 
-        guard let encodedURL = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-            throw NetworkError.invalidURL
-        }
-
-        guard let url = URL(string: encodedURL) else {
+        guard let url = components?.url else {
             throw NetworkError.invalidURL
         }
 
